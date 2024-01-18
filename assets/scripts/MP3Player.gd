@@ -6,6 +6,9 @@ extends Control
 @onready var scrollContainer = $ScrollContainer
 @onready var scrollH = scrollContainer.get_h_scroll_bar()
 @onready var scrollTimer = $scrollTimer
+@onready var volumeSlider = $volume
+@onready var _bus := AudioServer.get_bus_index("Music")
+
 signal killTween
 
 var testSong = "C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/sans..mp3"
@@ -17,6 +20,10 @@ func _ready():
 	SaveData._load()
 	get_dir_contents(musicArray, testFolder)
 	#_hide_scroll_bars()
+
+func _on_volume_value_changed(value):
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
+	print("volume is ", AudioServer.get_bus_volume_db(_bus))
 
 func _on_shuffle_on_start_pressed():
 	_shuffle_on_start()
