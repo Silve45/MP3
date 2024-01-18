@@ -19,6 +19,21 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
+[node name="shuffleOnStart" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -31.0
+offset_top = -185.0
+offset_right = 31.0
+offset_bottom = -145.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "shuffle on start"
+
 [node name="music" type="AudioStreamPlayer" parent="."]
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
@@ -36,7 +51,7 @@ grow_horizontal = 2
 grow_vertical = 2
 show_percentage = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
+[node name="ButtonsContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -50,21 +65,33 @@ offset_bottom = 150.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="back" type="Button" parent="HBoxContainer"]
+[node name="shuffle" type="Button" parent="ButtonsContainer"]
+layout_mode = 2
+text = "shuffle"
+
+[node name="back" type="Button" parent="ButtonsContainer"]
 layout_mode = 2
 text = "back"
 
-[node name="play" type="Button" parent="HBoxContainer"]
+[node name="play" type="Button" parent="ButtonsContainer"]
 layout_mode = 2
 text = "play"
 
-[node name="pause" type="Button" parent="HBoxContainer"]
+[node name="pause" type="Button" parent="ButtonsContainer"]
 layout_mode = 2
 text = "pause"
 
-[node name="foward" type="Button" parent="HBoxContainer"]
+[node name="foward" type="Button" parent="ButtonsContainer"]
 layout_mode = 2
 text = "next"
+
+[node name="loop" type="Button" parent="ButtonsContainer"]
+layout_mode = 2
+text = "loop"
+
+[node name="resetSongs" type="Button" parent="ButtonsContainer"]
+layout_mode = 2
+text = "reset songs"
 
 [node name="LineEdit" type="LineEdit" parent="."]
 layout_mode = 1
@@ -106,10 +133,14 @@ horizontal_alignment = 1
 wait_time = 3.0
 one_shot = true
 
+[connection signal="pressed" from="shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
 [connection signal="finished" from="music" to="." method="_on_music_finished"]
-[connection signal="pressed" from="HBoxContainer/back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="HBoxContainer/play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="HBoxContainer/pause" to="." method="_on_pause_pressed"]
-[connection signal="pressed" from="HBoxContainer/foward" to="." method="_on_foward_pressed"]
+[connection signal="pressed" from="ButtonsContainer/shuffle" to="." method="_on_shuffle_pressed"]
+[connection signal="pressed" from="ButtonsContainer/back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="ButtonsContainer/play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="ButtonsContainer/pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="ButtonsContainer/foward" to="." method="_on_foward_pressed"]
+[connection signal="pressed" from="ButtonsContainer/loop" to="." method="_on_loop_pressed"]
+[connection signal="pressed" from="ButtonsContainer/resetSongs" to="." method="_on_reset_songs_pressed"]
 [connection signal="text_submitted" from="LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="timeout" from="scrollTimer" to="." method="_on_scroll_timer_timeout"]

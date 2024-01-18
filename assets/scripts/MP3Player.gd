@@ -14,8 +14,22 @@ var musicArray = []
 var musicGarabage = []
 
 func _ready():
+	SaveData._load()
 	get_dir_contents(musicArray, testFolder)
-	_hide_scroll_bars()
+	#_hide_scroll_bars()
+
+func _on_shuffle_on_start_pressed():
+	_shuffle_on_start()
+
+func _shuffle_on_start():
+	if SaveData.shuffle == true:
+		SaveData.shuffle = false
+		print("SOS off")
+	else:
+		SaveData.shuffle = true
+		musicArray.shuffle()
+		print("SOS on")
+	SaveData._save()
 
 func _hide_scroll_bars():
 	scrollContainer.get_h_scroll_bar().modulate = Color(0, 0, 0, 0)
@@ -66,6 +80,15 @@ func _on_pause_pressed():
 	else:
 		music.stream_paused = false
 
+
+func _on_reset_songs_pressed():
+	_re_add_songs()
+
+func _on_shuffle_pressed():
+	musicArray.shuffle()
+
+
+
 func _play_previous_song():
 	if musicGarabage.size() != 0:
 		musicArray.insert(0, musicGarabage[0])
@@ -82,7 +105,7 @@ func _set_music():
 		_re_add_songs()
 	music.stream = load_mp3(musicArray[0])
 	_song_title(musicArray[0])
-	#scrollTween.kill()
+	
 	_resetScroll()
 	var length = music.stream.get_length()
 	progressBar.max_value = length
@@ -120,27 +143,44 @@ func _on_music_finished():
 
 func _play_next_song():
 	if musicArray.size() != 0:
-		print("array is NOT Zero")
+		#print("array is NOT Zero")
 		musicGarabage.insert(0, musicArray[0])
 		musicArray.remove_at(0)
 		_set_music()
 		music.play()
 	elif musicArray.size() == 0:
-		print("array is Zero")
+		#print("array is Zero")
 		_re_add_songs()
 
 func _re_add_songs():
 	musicArray.append_array(musicGarabage)
-	musicArray.shuffle()
+	musicGarabage.clear()
+	#musicArray.shuffle()# maybe move this to shuffle
 	_set_music()
 	music.play()
 
 
+var sound
+func _on_loop_pressed():
+	if sound != null:
+		if SaveData.loop == true:
+			sound.loop = false
+			SaveData.loop = false
+			print("looping off")
+			$ButtonsContainer/loop.text = "loop off"
+		else:
+			sound.loop = true
+			SaveData.loop = true
+			print("looping on")
+			$ButtonsContainer/loop.text = "loop on"
+		SaveData._save()
+	else:
+		print("sound is null")
 
 #____________________________
 func load_mp3(path):
 	var file = FileAccess.open(path, FileAccess.READ)
-	var sound = AudioStreamMP3.new()
+	sound = AudioStreamMP3.new()
 	sound.data = file.get_buffer(file.get_length())
 	#sound.loop = true
 	return sound
@@ -158,7 +198,11 @@ func get_dir_contents( array:Array, rootPath: String):
 		push_error("An error occurred when trying to access the path.")
 
 	array.append_array(levels)
-	array.shuffle()
+	if SaveData.shuffle == true:
+		array.shuffle()
+		print("shuffling")
+	else:
+		print("not shuffling")
 	#print(array)
 	return [levels, directories]
 
@@ -183,8 +227,6 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
-
-
 
 
 

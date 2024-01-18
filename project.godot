@@ -14,3 +14,7 @@ config/name="MP3"
 run/main_scene="res://scenes/mp_3_player.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+SaveData="*res://assets/scripts/save_data.gd"
