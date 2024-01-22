@@ -7,7 +7,9 @@ extends Control
 @onready var scrollH = scrollContainer.get_h_scroll_bar()
 @onready var scrollTimer = $scrollTimer
 @onready var volumeSlider = $volume
-@onready var _bus := AudioServer.get_bus_index("Music")
+#@onready var _bus := AudioServer.get_bus_index("Music")
+
+@onready var sound = AudioStreamMP3.new()
 
 signal killTween
 
@@ -19,11 +21,20 @@ var musicGarabage = []
 func _ready():
 	SaveData._load()
 	get_dir_contents(musicArray, testFolder)
+	_check_loop()
 	#_hide_scroll_bars()
+
+#just makes it full screen if I press f
+func _input(event):#doesn't work right now0
+	if event.is_action_pressed("debug"):
+		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		else:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
 func _on_volume_value_changed(value):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
-	print("volume is ", AudioServer.get_bus_volume_db(_bus))
+	#print("volume is ", AudioServer.get_bus_volume_db(_bus))
 
 func _on_shuffle_on_start_pressed():
 	_shuffle_on_start()
@@ -49,8 +60,9 @@ func _song_title(string):
 	var title = bacon.right(-(num + 1))
 	var num2 = title.rfind('.')
 	var newTitle = title.left(num2)
-	print(newTitle)
-	songLabel.set_text(newTitle)
+	#print(newTitle)
+	
+	return newTitle
 
 
 func _on_line_edit_text_submitted(new_text):
@@ -63,7 +75,7 @@ func _on_line_edit_text_submitted(new_text):
 		var text = new_text.replace("\\", "/")
 		var text2 = text.replace('"', "")
 		testFolder = text2
-		print(text2)
+		#print(text2)
 		get_dir_contents(musicArray, testFolder)
 
 func _process(_delta):
@@ -78,8 +90,7 @@ func _on_play_pressed():
 func _on_foward_pressed():
 	_play_next_song()
 
-func _on_back_pressed():
-	_play_previous_song()
+
 
 func _on_pause_pressed():
 	if music.stream_paused == false:
@@ -92,7 +103,28 @@ func _on_reset_songs_pressed():
 	_re_add_songs()
 
 func _on_shuffle_pressed():
+	_suffle()#only this here
+
+func _suffle():
+	musicGarabage.insert(0, musicArray[0])
 	musicArray.shuffle()
+	if musicArray.size() != 0:
+		_set_music()
+		music.play()
+	elif musicArray.size() == 0:
+		_re_add_songs()
+
+
+func _on_next_pressed():
+	print(" music garbage is ", musicGarabage)
+	_play_next_song()
+
+func _on_back_pressed():
+	print(" music garbage is ", musicGarabage)
+	_play_previous_song()
+
+func _on_refresh_song_pressed():
+	_re_add_songs()
 
 
 
@@ -107,11 +139,15 @@ func _play_previous_song():
 		print("no previous song")
 
 func _set_music():
-	print(musicGarabage)
+	#print(musicGarabage)
 	if musicArray.size() == 0:
 		_re_add_songs()
 	music.stream = load_mp3(musicArray[0])
 	_song_title(musicArray[0])
+	songLabel.set_text(_song_title(musicArray[0]))
+	#print("current song is, ", _song_title(musicArray[0]))
+	if musicGarabage.size() != 0:
+		print("last song is, ", _song_title(musicGarabage[0]))
 	
 	_resetScroll()
 	var length = music.stream.get_length()
@@ -150,13 +186,12 @@ func _on_music_finished():
 
 func _play_next_song():
 	if musicArray.size() != 0:
-		#print("array is NOT Zero")
+		#print("next is, ", musicArray )
 		musicGarabage.insert(0, musicArray[0])
 		musicArray.remove_at(0)
 		_set_music()
 		music.play()
 	elif musicArray.size() == 0:
-		#print("array is Zero")
 		_re_add_songs()
 
 func _re_add_songs():
@@ -167,27 +202,36 @@ func _re_add_songs():
 	music.play()
 
 
-var sound
+
 func _on_loop_pressed():
 	if sound != null:
 		if SaveData.loop == true:
 			sound.loop = false
 			SaveData.loop = false
-			print("looping off")
-			$ButtonsContainer/loop.text = "loop off"
+			_check_loop()
 		else:
 			sound.loop = true
 			SaveData.loop = true
-			print("looping on")
-			$ButtonsContainer/loop.text = "loop on"
+			_check_loop()
 		SaveData._save()
 	else:
 		print("sound is null")
 
+func _check_loop():
+	if SaveData.loop == true:
+		$buttonsContainer/loop.icon = load("res://assets/sprites/loop.png")
+		#print("looping true")
+		$ButtonsContainer/loop.text = "loop true"
+	else:
+		$buttonsContainer/loop.icon = load("res://assets/sprites/loopOff.png")
+		#print("looping off")
+		$ButtonsContainer/loop.text = "loop off"
+
+
 #____________________________
 func load_mp3(path):
 	var file = FileAccess.open(path, FileAccess.READ)
-	sound = AudioStreamMP3.new()
+	sound = AudioStreamMP3.new()#this fixed the crashing problem
 	sound.data = file.get_buffer(file.get_length())
 	#sound.loop = true
 	return sound
@@ -234,6 +278,4 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
-
-
 

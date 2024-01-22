@@ -1,0 +1,19 @@
+[gd_resource type="Theme" load_steps=4 format=3 uid="uid://cvsv7jc35wb41"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0mybb"]
+bg_color = Color(0.819608, 0.317647, 0.933333, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lurvo"]
+bg_color = Color(0.819608, 0.317647, 0.933333, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fb034"]
+bg_color = Color(0.870588, 0.505882, 0.956863, 1)
+
+[resource]
+Button/styles/hover = SubResource("StyleBoxFlat_0mybb")
+Button/styles/normal = SubResource("StyleBoxFlat_lurvo")
+Button/styles/pressed = SubResource("StyleBoxFlat_fb034")
