@@ -14,16 +14,31 @@ extends Control
 
 signal killTween
 
-var testSong = "C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/sans..mp3"
-var testFolder = "C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"
+#"C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"
+
+var folderArray = ["C:/Users/silve/Downloads/fartNoise","C:/Users/silve/Downloads/fartNoise2","C:/Users/silve/Downloads/fartNoise3"]
 var musicArray = []
 var musicGarabage = []
 
 func _ready():
 	SaveData._load()
-	get_dir_contents(musicArray, testFolder)
+	_get_folders()
+	print(musicArray)
 	_check_loop()
 	#_hide_scroll_bars()
+
+func _set_folderArray(clearMusicArray, array = []):
+	folderArray.clear()
+	folderArray.append_array(array)
+	if clearMusicArray == true:
+		musicArray.clear()
+	else:
+		pass
+	_get_folders()
+
+func _get_folders():
+	for n in folderArray.size():
+		get_dir_contents(musicArray, folderArray[n])
 
 #just makes it full screen if I press f
 func _input(event):#doesn't work right now0
@@ -78,19 +93,18 @@ func _song_title(string):
 	
 	return newTitle
 
-
 func _on_line_edit_text_submitted(new_text):
 	#this will clear the old array
 	if new_text == "":
-		testFolder = "C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"
+		_get_folders()
 	else:
-		musicArray.clear()
-		
 		var text = new_text.replace("\\", "/")
 		var text2 = text.replace('"', "")
-		testFolder = text2
+		var textArray = []#this will clear textarray everytime. move outside function for better functionality
+		textArray.append(text2)
 		#print(text2)
-		get_dir_contents(musicArray, testFolder)
+		_set_folderArray(true, textArray)
+
 
 
 func _process(_delta):
