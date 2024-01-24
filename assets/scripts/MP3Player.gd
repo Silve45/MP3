@@ -7,6 +7,7 @@ extends Control
 @onready var scrollH = scrollContainer.get_h_scroll_bar()
 @onready var scrollTimer = $scrollTimer
 @onready var volumeSlider = $volume
+@onready var songSlider = $songSlider
 #@onready var _bus := AudioServer.get_bus_index("Music")
 
 @onready var sound = AudioStreamMP3.new()
@@ -35,6 +36,19 @@ func _input(event):#doesn't work right now0
 func _on_volume_value_changed(value):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
 	#print("volume is ", AudioServer.get_bus_volume_db(_bus))
+
+#start of music slider
+var slider_moving = false
+func _on_song_slider_drag_started():
+	slider_moving = true
+
+func _on_song_slider_drag_ended(value_changed):
+	slider_moving = false
+
+func _on_song_slider_value_changed(value):
+	if slider_moving == true:
+		music.seek(value)
+#end of music slider
 
 func _on_shuffle_on_start_pressed():
 	_shuffle_on_start()
@@ -78,8 +92,11 @@ func _on_line_edit_text_submitted(new_text):
 		#print(text2)
 		get_dir_contents(musicArray, testFolder)
 
+
 func _process(_delta):
 	progressBar.value = music.get_playback_position()
+	if slider_moving == false:
+		songSlider.value = music.get_playback_position()
 
 func _on_play_pressed():
 	if music.stream_paused == true:
@@ -90,14 +107,11 @@ func _on_play_pressed():
 func _on_foward_pressed():
 	_play_next_song()
 
-
-
 func _on_pause_pressed():
 	if music.stream_paused == false:
 		music.stream_paused = true
 	else:
 		music.stream_paused = false
-
 
 func _on_reset_songs_pressed():
 	_re_add_songs()
@@ -152,6 +166,7 @@ func _set_music():
 	_resetScroll()
 	var length = music.stream.get_length()
 	progressBar.max_value = length
+	songSlider.max_value = length
 
 func _on_scroll_timer_timeout():
 	_scroll()
@@ -278,4 +293,5 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
+
 

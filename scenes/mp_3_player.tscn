@@ -60,6 +60,20 @@ grow_horizontal = 2
 grow_vertical = 2
 show_percentage = false
 
+[node name="songSlider" type="HSlider" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -523.0
+offset_top = 25.0
+offset_right = 523.0
+offset_bottom = 41.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="ButtonsContainer" type="HBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -211,6 +225,9 @@ icon = ExtResource("9_uwtu1")
 
 [connection signal="pressed" from="shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
 [connection signal="finished" from="music" to="." method="_on_music_finished"]
+[connection signal="drag_ended" from="songSlider" to="." method="_on_song_slider_drag_ended"]
+[connection signal="drag_started" from="songSlider" to="." method="_on_song_slider_drag_started"]
+[connection signal="value_changed" from="songSlider" to="." method="_on_song_slider_value_changed"]
 [connection signal="pressed" from="ButtonsContainer/shuffle" to="." method="_on_shuffle_pressed"]
 [connection signal="pressed" from="ButtonsContainer/back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="ButtonsContainer/play" to="." method="_on_play_pressed"]
