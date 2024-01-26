@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://cg6w6dq50qp4"]
+[gd_scene load_steps=4 format=3 uid="uid://cg6w6dq50qp4"]
 
 [ext_resource type="Script" path="res://assets/scripts/playlists.gd" id="1_b67ml"]
+[ext_resource type="PackedScene" uid="uid://odql74yntvkg" path="res://scenes/playlistButton.tscn" id="2_c2tkv"]
 [ext_resource type="Theme" uid="uid://ccxegmojnss2" path="res://resources/themes/30font.tres" id="3_ktpu0"]
 
 [node name="playlists" type="Control"]
@@ -28,6 +29,9 @@ grow_vertical = 2
 vertical_scroll_mode = 0
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="playlistButton" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_c2tkv")]
 layout_mode = 2
 
 [node name="buttonPlaylists" type="Panel" parent="."]
@@ -64,5 +68,6 @@ expand_to_text_length = true
 layout_mode = 2
 text = "close"
 
+[connection signal="pressed" from="ScrollContainer/HBoxContainer/playlistButton" to="." method="_on_playlist_button_pressed"]
 [connection signal="text_submitted" from="buttonPlaylists/ScrollContainer2/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="pressed" from="buttonPlaylists/ScrollContainer2/VBoxContainer/close" to="." method="_on_close_pressed"]

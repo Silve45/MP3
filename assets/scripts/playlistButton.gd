@@ -1,6 +1,6 @@
 class_name playlistButton
 extends Button
-var array = ["AA"]
+var array = [""]
 
 #needs to be able to save array ( do this next time )
 

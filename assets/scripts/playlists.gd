@@ -13,6 +13,10 @@ var currentArray = playlistArray # by default
 func _ready():
 	_add_playlist_button()
 	_add_playlist_button()
+	_add_playlist_button()
+
+	SaveData._load_playlist(hboxScroll)
+
 
 func _add_playlist_button():
 	var button2 = playlistButton.new()
@@ -21,9 +25,6 @@ func _add_playlist_button():
 	button2.pressed.connect(_playlist_edit_open.bind(button2))
 	button2.text = str(num)
 
-#delete after done
-func _on_playlist_button_pressed():
-	buttonPlaylists.visible = true
 
 func _playlist_edit_open(button2):
 	print(button2.array)
@@ -44,6 +45,7 @@ func _add_playlist_array(array,new_text):
 	vboxScroll.add_child(newButton)
 	vboxScroll.move_child(lineedit, vboxScroll.get_child_count())
 	lineedit.text = ""
+	SaveData._save_playlist(hboxScroll)
 	print(array)
 
 func _ready_playlist_array(array):
