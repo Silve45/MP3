@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=3 uid="uid://cg6w6dq50qp4"]
+
+[ext_resource type="Script" path="res://assets/scripts/playlists.gd" id="1_b67ml"]
+[ext_resource type="PackedScene" uid="uid://odql74yntvkg" path="res://scenes/playlistButton.tscn" id="2_c2tkv"]
+[ext_resource type="Theme" uid="uid://ccxegmojnss2" path="res://resources/themes/30font.tres" id="3_ktpu0"]
+
+[node name="playlists" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_b67ml")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -485.0
+offset_top = -44.0
+offset_right = 485.0
+offset_bottom = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+vertical_scroll_mode = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
+layout_mode = 2
+
+[node name="playlistButton" parent="ScrollContainer/HBoxContainer" instance=ExtResource("2_c2tkv")]
+layout_mode = 2
+
+[node name="buttonPlaylists" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_ktpu0")
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="buttonPlaylists"]
+layout_mode = 1
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -144.5
+offset_right = 144.5
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="buttonPlaylists/ScrollContainer2"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="buttonPlaylists/ScrollContainer2/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "add another folder"
+expand_to_text_length = true
+
+[node name="close" type="Button" parent="buttonPlaylists/ScrollContainer2/VBoxContainer"]
+layout_mode = 2
+text = "close"
+
+[connection signal="pressed" from="ScrollContainer/HBoxContainer/playlistButton" to="." method="_on_playlist_button_pressed"]
+[connection signal="text_submitted" from="buttonPlaylists/ScrollContainer2/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
+[connection signal="pressed" from="buttonPlaylists/ScrollContainer2/VBoxContainer/close" to="." method="_on_close_pressed"]

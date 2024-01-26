@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://odql74yntvkg"]
+
+[ext_resource type="Theme" uid="uid://emdmhnbaqay1" path="res://resources/themes/blueButtonTheme.tres" id="1_jqjsb"]
+[ext_resource type="Script" path="res://assets/scripts/playlistButton.gd" id="2_cyfpq"]
+
+[node name="playlistButton" type="Button"]
+custom_minimum_size = Vector2(300, 300)
+theme = ExtResource("1_jqjsb")
+theme_override_font_sizes/font_size = 200
+text = "1"
+script = ExtResource("2_cyfpq")

@@ -14,9 +14,8 @@ extends Control
 
 signal killTween
 
-#"C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"
-
-var folderArray = ["C:/Users/silve/Downloads/fartNoise","C:/Users/silve/Downloads/fartNoise2","C:/Users/silve/Downloads/fartNoise3"]
+#"C:/Users/silve/Downloads/fartNoise","C:/Users/silve/Downloads/fartNoise2","C:/Users/silve/Downloads/fartNoise3"
+var folderArray = ["C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"]
 var musicArray = []
 var musicGarabage = []
 
