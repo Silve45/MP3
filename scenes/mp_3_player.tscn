@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://b67iudoilamu4"]
+[gd_scene load_steps=10 format=3 uid="uid://b67iudoilamu4"]
 
 [ext_resource type="Script" path="res://assets/scripts/MP3Player.gd" id="1_g3eqe"]
 [ext_resource type="Theme" uid="uid://emdmhnbaqay1" path="res://resources/themes/blueButtonTheme.tres" id="2_cxls3"]
@@ -9,7 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://chc4pk2vrsw1t" path="res://assets/sprites/next.png" id="7_ilxhf"]
 [ext_resource type="Texture2D" uid="uid://c0wgpbxq0kjk7" path="res://assets/sprites/loop.png" id="8_cv1b7"]
 [ext_resource type="Texture2D" uid="uid://cy4m3gbwvvg5m" path="res://assets/sprites/refreshSongs.png" id="9_uwtu1"]
-[ext_resource type="PackedScene" uid="uid://odql74yntvkg" path="res://scenes/playlistButton.tscn" id="10_e6wk3"]
 
 [node name="MP3Player" type="Control"]
 layout_mode = 3
@@ -223,10 +222,6 @@ icon = ExtResource("8_cv1b7")
 custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 icon = ExtResource("9_uwtu1")
-
-[node name="add new button" parent="." instance=ExtResource("10_e6wk3")]
-text = "+"
-script = null
 
 [connection signal="pressed" from="shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
 [connection signal="finished" from="music" to="." method="_on_music_finished"]

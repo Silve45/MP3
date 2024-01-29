@@ -113,6 +113,10 @@ func _on_close_pressed():
 	for child in vboxScroll.get_children():
 		if child.is_in_group("buttons"):
 			child.queue_free()
-	#if currentButton.array == []:
-		#currentButton.queue_free()
+	if currentButton.array == []:
+		SaveData._remove_playlist(currentButton, vboxScroll)
+		currentButton.queue_free()
+		await currentButton.tree_exited
+		SaveData.emit_signal("changeNum")
+		#SaveData._fix_order(SaveData.playlist_dict)
 
