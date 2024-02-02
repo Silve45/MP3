@@ -16,10 +16,28 @@ var addButtonON = false
 
 func _ready():
 	SaveData.connect("newButton", _add_playlist_button)
-	
+	SaveData._load()
 	SaveData._load_playlist(hboxScroll)
 	_make_add_button()
 	
+
+
+func _on_select_playlist_pressed():
+	_select_playlist()
+
+func _select_playlist():
+	if currentButton.array.size() > 0:
+		SaveData.currentPlaylist = []
+		SaveData.currentPlaylist.append_array(currentButton.array) 
+		SaveData._save()
+		buttonPlaylists.visible = false
+		#removes children so there are no duplicate buttons
+		for child in vboxScroll.get_children():
+			if child.is_in_group("buttons"):
+				child.queue_free()
+		#print("folder array is ", SaveData.folderArray)
+	else:
+		print("size is zero. fix it")
 
 func _make_add_button():
 	addButton = Button.new()
@@ -56,6 +74,7 @@ func _playlist_edit_open(button2):
 	_ready_playlist_array(button2.array)
 	buttonPlaylists.visible = true
 
+
 func _on_add_new_button_pressed():
 	_add_playlist_button()
 	_add_button_index_last()
@@ -65,6 +84,11 @@ func _on_line_edit_text_submitted(new_text):
 	_add_playlist_array(currentArray, new_text)
 
 func _add_playlist_array(array,new_text):
+	#blocks unneeded " or '
+	var unwantedChars = ['"', "'"]
+	for c in unwantedChars:
+		new_text = new_text.replace(c, "")
+	
 	array.append(new_text)
 	var newButton = Button.new()
 	newButton.add_to_group("buttons")
@@ -119,4 +143,3 @@ func _on_close_pressed():
 		await currentButton.tree_exited
 		SaveData.emit_signal("changeNum")
 		#SaveData._fix_order(SaveData.playlist_dict)
-

@@ -7,7 +7,11 @@ var loop = false
 signal newButton
 signal changeNum
 var playlist_dict := {}
+#var folderArray = ["C:/Users/silve/Downloads/fartNoise3"]
+var currentPlaylist = ["default playlist"]
 #needs to save the array. Do that next time! Super close :)
+
+
 
 func _save_playlist(currentButton, vbox):
 	var file = FileAccess.open(save_playlist, FileAccess.WRITE)
@@ -89,6 +93,7 @@ func _load_playlist(hboxScroll):
 		file.close()
 		
 		print(loaded_playlist_data)
+
 		playlist_dict = loaded_playlist_data #makes sure data is good!
 	else:
 		print("no playlist data")
@@ -101,7 +106,6 @@ func _song_title(string):
 	print(title)
 	
 	return title
-
 
 func _remove_playlist(currentButton, vbox):
 	if currentButton.array == []:
@@ -136,19 +140,19 @@ func _create_playlist_data(currentButton, vbox):
 	print(playlist_dict)
 	return playlist_dict
 
-
 #save things
 func _save():
 	var file = FileAccess.open(save_file, FileAccess.WRITE)
 	var player_data = create_player_data()
 	file.store_var(player_data)
 	file.close()#me
-
+	print("save done")
 
 func create_player_data():
 	var player_dict = {
 		"LOOP": loop,
-		"SHUFFLE": shuffle
+		"SHUFFLE": shuffle,
+		"CURRENTPLAYLIST": currentPlaylist
 	}
 	return player_dict
 
@@ -158,8 +162,9 @@ func _load():
 		var loaded_player_data = file.get_var()
 		loop = loaded_player_data.LOOP
 		shuffle = loaded_player_data.SHUFFLE
+		currentPlaylist = loaded_player_data.CURRENTPLAYLIST
 		file.close()
 	else:
 		_save()
-
+	print("current playlist is ", currentPlaylist)
 

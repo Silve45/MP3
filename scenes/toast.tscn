@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://cwsf5hla41i13"]
+
+[ext_resource type="Theme" uid="uid://box4rjgyg0qco" path="res://resources/themes/toastTheme.tres" id="1_6nqu2"]
+[ext_resource type="Script" path="res://assets/scripts/toast.gd" id="1_io13d"]
+
+[node name="Toast" type="Label"]
+offset_right = 172.0
+offset_bottom = 63.0
+size_flags_horizontal = 4
+theme = ExtResource("1_6nqu2")
+text = "fdsafasf"
+script = ExtResource("1_io13d")

@@ -8,6 +8,8 @@ extends Control
 @onready var scrollTimer = $scrollTimer
 @onready var volumeSlider = $volume
 @onready var songSlider = $songSlider
+@onready var toastContainer = $toastContainer
+#@onready var toastTimer = $toastVisiblityTimer
 #@onready var _bus := AudioServer.get_bus_index("Music")
 
 @onready var sound = AudioStreamMP3.new()
@@ -19,6 +21,7 @@ var folderArray = ["C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/Oth
 var musicArray = []
 var musicGarabage = []
 
+
 func _ready():
 	SaveData._load()
 	_get_folders()
@@ -26,18 +29,9 @@ func _ready():
 	_check_loop()
 	#_hide_scroll_bars()
 
-func _set_folderArray(clearMusicArray, array = []):
-	folderArray.clear()
-	folderArray.append_array(array)
-	if clearMusicArray == true:
-		musicArray.clear()
-	else:
-		pass
-	_get_folders()
-
 func _get_folders():
-	for n in folderArray.size():
-		get_dir_contents(musicArray, folderArray[n])
+	for n in SaveData.currentPlaylist.size():
+		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
 
 #just makes it full screen if I press f
 func _input(event):#doesn't work right now0
@@ -91,18 +85,6 @@ func _song_title(string):
 	#print(newTitle)
 	
 	return newTitle
-
-func _on_line_edit_text_submitted(new_text):
-	#this will clear the old array
-	if new_text == "":
-		_get_folders()
-	else:
-		var text = new_text.replace("\\", "/")
-		var text2 = text.replace('"', "")
-		var textArray = []#this will clear textarray everytime. move outside function for better functionality
-		textArray.append(text2)
-		#print(text2)
-		_set_folderArray(true, textArray)
 
 
 
@@ -255,6 +237,12 @@ func _check_loop():
 		#print("looping off")
 		$ButtonsContainer/loop.text = "loop off"
 
+func _toast(text):
+	var toastMake = toast.new()
+	toastMake._toast(text)
+	toastContainer.add_child(toastMake)
+
+
 
 #____________________________
 func load_mp3(path):
@@ -275,6 +263,7 @@ func get_dir_contents( array:Array, rootPath: String):
 		_add_dir_contents(dir, levels, directories)
 	else:
 		push_error("An error occurred when trying to access the path.")
+		_toast(str(rootPath, " does not exist"))
 
 	array.append_array(levels)
 	if SaveData.shuffle == true:
@@ -306,5 +295,8 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
+
+
+
 
 

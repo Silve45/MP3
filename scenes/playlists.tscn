@@ -64,5 +64,20 @@ expand_to_text_length = true
 layout_mode = 2
 text = "close"
 
+[node name="selectPlaylist" type="Button" parent="buttonPlaylists"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -4.0
+offset_top = -8.0
+offset_right = 4.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "select playlist"
+
 [connection signal="text_submitted" from="buttonPlaylists/ScrollContainer2/VBoxContainer/LineEdit" to="." method="_on_line_edit_text_submitted"]
 [connection signal="pressed" from="buttonPlaylists/ScrollContainer2/VBoxContainer/close" to="." method="_on_close_pressed"]
+[connection signal="pressed" from="buttonPlaylists/selectPlaylist" to="." method="_on_select_playlist_pressed"]
