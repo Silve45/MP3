@@ -24,11 +24,12 @@ var musicGarabage = []
 
 
 func _ready():
+	$playlists.connect("folders", _get_folders)
 	$"ui-SongDisplay".connect("sendSong",_play_selected_song )
 	SaveData._load()
 	_get_folders()
 	_ready_shuffle()
-	print(musicArray)
+	#print(musicArray)
 	_check_loop()
 	#_hide_scroll_bars()
 
@@ -42,7 +43,10 @@ func _ready_shuffle():
 #call when you change it to
 func _get_folders():
 	for n in SaveData.currentPlaylist.size():
+		if musicArray.size() > 0:
+			musicArray.clear()
 		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
+		_ready_shuffle()
 		Globals._emit_change_array(musicArray)
 
 #just makes it full screen if I press f

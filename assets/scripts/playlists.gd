@@ -6,6 +6,7 @@ extends Control
 @onready var vboxScroll = $buttonPlaylists/ScrollContainer2/VBoxContainer
 @onready var lineedit = $buttonPlaylists/ScrollContainer2/VBoxContainer/LineEdit
 @onready var buttonPlaylists = $buttonPlaylists
+@onready var displayFolder = $buttonPlaylists/displayFolder
 #@onready var addNewButton = $"ScrollContainer/HBoxContainer/add new button"
 
 var playlistArray = ["filler"]
@@ -13,6 +14,7 @@ var currentArray = playlistArray # by default
 var currentButton
 var addButton
 var addButtonON = false
+signal folders
 
 func _ready():
 	visible = false
@@ -20,8 +22,7 @@ func _ready():
 	SaveData._load()
 	SaveData._load_playlist(hboxScroll)
 	_make_add_button()
-	
-
+	displayFolder.visible = false #makes it unseeable unless you hover
 
 func _on_select_playlist_pressed():
 	_select_playlist()
@@ -36,6 +37,7 @@ func _select_playlist():
 		for child in vboxScroll.get_children():
 			if child.is_in_group("buttons"):
 				child.queue_free()
+		emit_signal("folders")
 		#print("folder array is ", SaveData.folderArray)
 	else:
 		print("size is zero. fix it")
@@ -94,7 +96,10 @@ func _add_playlist_array(array,new_text):
 	var newButton = Button.new()
 	newButton.add_to_group("buttons")
 	newButton.pressed.connect(_button_press.bind(newButton))
+	newButton.mouse_entered.connect(_display_song_name.bind(newButton))
+	newButton.mouse_exited.connect(_stopDisplay.bind(newButton))
 	newButton.set_text(new_text)
+	
 	vboxScroll.add_child(newButton)
 	vboxScroll.move_child(lineedit, vboxScroll.get_child_count())
 	lineedit.text = ""
@@ -108,12 +113,22 @@ func _ready_playlist_array(array):
 			var text = array[n - 1]
 			var newButton = Button.new()
 			newButton.add_to_group("buttons")
+			newButton.set_text_overrun_behavior(TextServer.OVERRUN_TRIM_ELLIPSIS)
+			#print("behavior is", newButton.get_text_overrun_behavior())
 			newButton.pressed.connect(_button_press.bind(newButton))
+			newButton.mouse_entered.connect(_display_song_name.bind(newButton))
+			newButton.mouse_exited.connect(_stopDisplay.bind(newButton))
 			newButton.set_text(text)
 			vboxScroll.add_child(newButton)
 			vboxScroll.move_child(lineedit, vboxScroll.get_child_count())
 			lineedit.text = ""
 
+func _display_song_name(newButton):
+	displayFolder.visible = true
+	displayFolder.set_text(newButton.text)
+
+func _stopDisplay(newButton):
+	displayFolder.visible = false
 
 func _button_press(newButton): #array might break it, switch back to playlist array maybe
 	print(newButton.text)
