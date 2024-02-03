@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 SaveData="*res://assets/scripts/save_data.gd"
+Globals="*res://assets/scripts/globals.gd"
 
 [display]
 

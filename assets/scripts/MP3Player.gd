@@ -9,6 +9,7 @@ extends Control
 @onready var volumeSlider = $volume
 @onready var songSlider = $songSlider
 @onready var toastContainer = $toastContainer
+@onready var uisongDisplay = $"ui-SongDisplay"
 #@onready var toastTimer = $toastVisiblityTimer
 #@onready var _bus := AudioServer.get_bus_index("Music")
 
@@ -23,15 +24,26 @@ var musicGarabage = []
 
 
 func _ready():
+	$"ui-SongDisplay".connect("sendSong",_play_selected_song )
 	SaveData._load()
 	_get_folders()
+	_ready_shuffle()
 	print(musicArray)
 	_check_loop()
 	#_hide_scroll_bars()
 
+func _ready_shuffle():
+	if SaveData.shuffle == true:
+		musicArray.shuffle()
+		print("shuffling")
+	else:
+		print("not shuffling")
+
+#call when you change it to
 func _get_folders():
 	for n in SaveData.currentPlaylist.size():
 		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
+		Globals._emit_change_array(musicArray)
 
 #just makes it full screen if I press f
 func _input(event):#doesn't work right now0
@@ -194,6 +206,17 @@ func _on_music_finished():
 
 	#print(musicArray.size())
 
+func _play_selected_song():
+	if musicArray.size() != 0:
+		#print("next is, ", musicArray )
+		
+		musicGarabage.insert(0, musicArray[0])
+		musicArray.remove_at(0)
+		musicArray.insert(0, Globals.nextSong)
+		_set_music()
+		music.play()
+
+
 func _play_next_song():
 	if musicArray.size() != 0:
 		#print("next is, ", musicArray )
@@ -242,7 +265,12 @@ func _toast(text):
 	toastMake._toast(text)
 	toastContainer.add_child(toastMake)
 
+func _on_display_songs_pressed():
+	uisongDisplay.visible = true
 
+func _on_display_playlist_pressed():
+	$playlists.visible = true
+	print("display")
 
 #____________________________
 func load_mp3(path):
@@ -266,11 +294,6 @@ func get_dir_contents( array:Array, rootPath: String):
 		_toast(str(rootPath, " does not exist"))
 
 	array.append_array(levels)
-	if SaveData.shuffle == true:
-		array.shuffle()
-		print("shuffling")
-	else:
-		print("not shuffling")
 	#print(array)
 	return [levels, directories]
 
@@ -298,5 +321,29 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 
 
 
+#make it so that when you change playlist, it will actually change out the songs!
 
-
+#func _on_line_edit_text_submitted(new_text):
+	##this will clear the old array
+	#if new_text == "":
+		#_get_folders()
+	#else:
+		#var text = new_text.replace("\\", "/")
+		#var text2 = text.replace('"', "")
+		#var textArray = []#this will clear textarray everytime. move outside function for better functionality
+		#textArray.append(text2)
+		##print(text2)
+		#_set_folderArray(true, textArray)
+#
+#func _set_folderArray(clearMusicArray, array = []):
+	#folderArray.clear()
+	#folderArray.append_array(array)
+	#if clearMusicArray == true:
+		#musicArray.clear()
+	#else:
+		#pass
+	#_get_folders()
+#
+#func _get_folders():
+	#for n in folderArray.size():
+		#get_dir_contents(musicArray, folderArray[n])

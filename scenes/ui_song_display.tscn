@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dqed5caxe0u53"]
+[gd_scene load_steps=4 format=3 uid="uid://dqed5caxe0u53"]
 
-[ext_resource type="Texture2D" uid="uid://du3wa8fws7hio" path="res://icon.svg" id="1_807rg"]
+[ext_resource type="Script" path="res://assets/scripts/ui_song_display.gd" id="1_yppuj"]
+[ext_resource type="Theme" uid="uid://box4rjgyg0qco" path="res://resources/themes/toastTheme.tres" id="3_227mu"]
+[ext_resource type="Theme" uid="uid://ccxegmojnss2" path="res://resources/themes/30font.tres" id="3_ca0hk"]
 
 [node name="ui-SongDisplay" type="Control"]
 layout_mode = 3
@@ -9,6 +11,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1_yppuj")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 1
@@ -29,32 +32,38 @@ horizontal_scroll_mode = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
 layout_mode = 2
+theme_override_constants/separation = 50
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Panel/ScrollContainer/VBoxContainer"]
-layout_mode = 2
-theme_override_constants/separation = 86
+[node name="songName" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -66.5
+offset_top = -59.0
+offset_right = 66.5
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_227mu")
+text = "song name"
+horizontal_alignment = 1
 
-[node name="Button" type="Button" parent="Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-icon = ExtResource("1_807rg")
+[node name="close" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 79.0
+offset_top = -50.0
+offset_right = 160.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = ExtResource("3_ca0hk")
+text = "close"
 
-[node name="Button2" type="Button" parent="Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-icon = ExtResource("1_807rg")
-
-[node name="Button3" type="Button" parent="Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-icon = ExtResource("1_807rg")
-
-[node name="Button4" type="Button" parent="Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-icon = ExtResource("1_807rg")
-
-[node name="Button5" type="Button" parent="Panel/ScrollContainer/VBoxContainer/HBoxContainer"]
-custom_minimum_size = Vector2(160, 160)
-layout_mode = 2
-icon = ExtResource("1_807rg")
+[connection signal="pressed" from="close" to="." method="_on_close_pressed"]

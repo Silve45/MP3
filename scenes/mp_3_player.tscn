@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://b67iudoilamu4"]
+[gd_scene load_steps=13 format=3 uid="uid://b67iudoilamu4"]
 
 [ext_resource type="Script" path="res://assets/scripts/MP3Player.gd" id="1_g3eqe"]
 [ext_resource type="Theme" uid="uid://emdmhnbaqay1" path="res://resources/themes/blueButtonTheme.tres" id="2_cxls3"]
@@ -9,6 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://chc4pk2vrsw1t" path="res://assets/sprites/next.png" id="7_ilxhf"]
 [ext_resource type="Texture2D" uid="uid://c0wgpbxq0kjk7" path="res://assets/sprites/loop.png" id="8_cv1b7"]
 [ext_resource type="Texture2D" uid="uid://cy4m3gbwvvg5m" path="res://assets/sprites/refreshSongs.png" id="9_uwtu1"]
+[ext_resource type="Theme" uid="uid://ccxegmojnss2" path="res://resources/themes/30font.tres" id="10_kmh5g"]
+[ext_resource type="PackedScene" uid="uid://dqed5caxe0u53" path="res://scenes/ui_song_display.tscn" id="11_hrs78"]
+[ext_resource type="PackedScene" uid="uid://cg6w6dq50qp4" path="res://scenes/playlists.tscn" id="12_37i8v"]
 
 [node name="MP3Player" type="Control"]
 layout_mode = 3
@@ -221,6 +224,32 @@ offset_right = 64.0
 offset_bottom = 322.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+
+[node name="displaySongs" type="Button" parent="."]
+layout_mode = 0
+offset_left = 84.0
+offset_top = 62.0
+offset_right = 92.0
+offset_bottom = 70.0
+theme = ExtResource("10_kmh5g")
+text = "display songs"
+
+[node name="displayPlaylist" type="Button" parent="."]
+layout_mode = 1
+offset_left = 85.0
+offset_top = 133.0
+offset_right = 306.0
+offset_bottom = 183.0
+theme = ExtResource("10_kmh5g")
+text = "display playlist"
+
+[node name="ui-SongDisplay" parent="." instance=ExtResource("11_hrs78")]
+visible = false
+layout_mode = 1
+
+[node name="playlists" parent="." instance=ExtResource("12_37i8v")]
+layout_mode = 1
 
 [connection signal="pressed" from="shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
 [connection signal="finished" from="music" to="." method="_on_music_finished"]
@@ -243,3 +272,5 @@ grow_vertical = 2
 [connection signal="pressed" from="buttonsContainer/next" to="." method="_on_next_pressed"]
 [connection signal="pressed" from="buttonsContainer/loop" to="." method="_on_loop_pressed"]
 [connection signal="pressed" from="buttonsContainer/refreshSong" to="." method="_on_refresh_song_pressed"]
+[connection signal="pressed" from="displaySongs" to="." method="_on_display_songs_pressed"]
+[connection signal="pressed" from="displayPlaylist" to="." method="_on_display_playlist_pressed"]

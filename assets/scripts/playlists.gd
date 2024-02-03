@@ -15,6 +15,7 @@ var addButton
 var addButtonON = false
 
 func _ready():
+	visible = false
 	SaveData.connect("newButton", _add_playlist_button)
 	SaveData._load()
 	SaveData._load_playlist(hboxScroll)
@@ -143,3 +144,7 @@ func _on_close_pressed():
 		await currentButton.tree_exited
 		SaveData.emit_signal("changeNum")
 		#SaveData._fix_order(SaveData.playlist_dict)
+
+
+func _on_close_screen_pressed():
+	visible = false
