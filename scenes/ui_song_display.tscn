@@ -66,4 +66,21 @@ grow_vertical = 0
 theme = ExtResource("3_ca0hk")
 text = "close"
 
+[node name="search" type="LineEdit" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -106.0
+offset_top = 201.0
+offset_right = 94.0
+offset_bottom = 251.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_ca0hk")
+placeholder_text = "search..."
+
 [connection signal="pressed" from="close" to="." method="_on_close_pressed"]
+[connection signal="text_submitted" from="search" to="." method="_on_search_text_submitted"]

@@ -24,6 +24,7 @@ var musicGarabage = []
 
 
 func _ready():
+	
 	$playlists.connect("folders", _get_folders)
 	$"ui-SongDisplay".connect("sendSong",_play_selected_song )
 	SaveData._load()

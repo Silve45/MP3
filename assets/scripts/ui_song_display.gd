@@ -5,9 +5,10 @@ extends Control
 @onready var vboxContainer = $Panel/ScrollContainer/VBoxContainer
 
 
-var array = ["name1", "name2", "name3", "name4", "name5", "name6"]
+var array = []
 var currentHboxContainer #= $Panel/ScrollContainer/VBoxContainer/HBoxContainer
 signal sendSong
+
 
 func _ready():
 	visible = false
@@ -37,6 +38,10 @@ func _make_buttons():
 		button.buttonName = _song_title(array[n])
 		button.mouse_entered.connect(_display_song_name.bind(button))
 		button.pressed.connect(_play_song.bind(button))
+		button.search.connect(_button_search.bind(button))
+		
+		
+		
 		if currentHboxContainer.get_child_count() < 5:
 			currentHboxContainer.add_child(button)
 		else:
@@ -61,5 +66,35 @@ func _play_song(button):
 	Globals.nextSong = button.buttonInfo
 	emit_signal("sendSong")
 
+func _button_search(button):
+
+	var nameArray = []
+	for n in button.buttonName.length():
+		nameArray.append(button.buttonName[n].to_lower())
+	
+	var searchArray = []
+	for n in Globals.searchWord.length():
+		searchArray.append(Globals.searchWord[n].to_lower())
+
+	
+	for n in searchArray.size():
+		if nameArray[n] != searchArray[n]:
+			button.visible = false
+			break
+		else:
+			button.visible = true
+		
+	if Globals.searchWord == "":
+		button.visible = true
+
+func _on_search_text_submitted(new_text):
+	Globals.searchWord = new_text
+	Globals.emit_signal("forceSearch")
+
+
+
+
 func _on_close_pressed():
 	visible = false
+
+

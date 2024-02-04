@@ -3,6 +3,7 @@ extends TextureButton
 
 var buttonName = "coolname"
 var buttonInfo 
+signal search
 #@onready var label = $Label
 
 func _ready():
@@ -13,7 +14,11 @@ func _ready():
 	label.set_text(buttonName)
 	label.visible_characters = 11
 	add_child(label)
-	
+	Globals.connect("forceSearch", _emit_search)
+
+func _emit_search():
+	emit_signal("search")
+	#print("record button's search called")#worked!
 
 func _set_name(text, info):
 	buttonName = text
