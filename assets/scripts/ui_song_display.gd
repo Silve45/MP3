@@ -1,14 +1,10 @@
 extends Control
 
 @onready var songNameLabel = $songName
-#@onready var hboxContainer = $Panel/ScrollContainer/VBoxContainer/HBoxContainer
-@onready var vboxContainer = $Panel/ScrollContainer/VBoxContainer
-
+@onready var gridContainer = $Panel/ScrollContainer/GridContainer
 
 var array = []
-var currentHboxContainer #= $Panel/ScrollContainer/VBoxContainer/HBoxContainer
 signal sendSong
-
 
 func _ready():
 	visible = false
@@ -20,17 +16,11 @@ func _set_array():
 	_make_buttons()
 	print("set array called")
 
-func _make_new_hbox():
-	var hbox = HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 86)
-	vboxContainer.add_child(hbox)
-	currentHboxContainer = hbox
-
 func _make_buttons():
 	#clear old for new
-	for n in vboxContainer.get_children():
-		vboxContainer.remove_child(n)
-	_make_new_hbox()
+	for n in gridContainer.get_children():
+		gridContainer.remove_child(n)
+
 	for n in array.size():
 		var button = recordButton.new()
 		
@@ -40,13 +30,13 @@ func _make_buttons():
 		button.pressed.connect(_play_song.bind(button))
 		button.search.connect(_button_search.bind(button))
 		
-		
-		
-		if currentHboxContainer.get_child_count() < 5:
-			currentHboxContainer.add_child(button)
-		else:
-			_make_new_hbox()
-			currentHboxContainer.add_child(button)
+		gridContainer.add_child(button)
+		#
+		#if currentHboxContainer.get_child_count() < 5:
+			#currentHboxContainer.add_child(button)
+		#else:
+			#_make_new_hbox()
+			#currentHboxContainer.add_child(button)
 
 func _song_title(string):
 	var bacon = string
@@ -87,10 +77,10 @@ func _button_search(button):
 	if Globals.searchWord == "":
 		button.visible = true
 
-func _on_search_text_submitted(new_text):
+
+func _on_search_text_changed(new_text):
 	Globals.searchWord = new_text
 	Globals.emit_signal("forceSearch")
-
 
 
 

@@ -324,31 +324,3 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 
 	dir.list_dir_end()
 
-
-
-#make it so that when you change playlist, it will actually change out the songs!
-
-#func _on_line_edit_text_submitted(new_text):
-	##this will clear the old array
-	#if new_text == "":
-		#_get_folders()
-	#else:
-		#var text = new_text.replace("\\", "/")
-		#var text2 = text.replace('"', "")
-		#var textArray = []#this will clear textarray everytime. move outside function for better functionality
-		#textArray.append(text2)
-		##print(text2)
-		#_set_folderArray(true, textArray)
-#
-#func _set_folderArray(clearMusicArray, array = []):
-	#folderArray.clear()
-	#folderArray.append_array(array)
-	#if clearMusicArray == true:
-		#musicArray.clear()
-	#else:
-		#pass
-	#_get_folders()
-#
-#func _get_folders():
-	#for n in folderArray.size():
-		#get_dir_contents(musicArray, folderArray[n])
