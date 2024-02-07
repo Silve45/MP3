@@ -24,21 +24,32 @@ var musicGarabage = []
 
 
 func _ready():
-	
+	$playlists.connect("changeDisplay", _change_playlist_display_number )
 	$playlists.connect("folders", _get_folders)
 	$"ui-SongDisplay".connect("sendSong",_play_selected_song )
 	SaveData._load()
 	_get_folders()
 	_ready_shuffle()
-	#print(musicArray)
 	_check_loop()
-	#_hide_scroll_bars()
+	_hide_scroll_bars()
+	_change_playlist_display_number()
+
+
+func _process(_delta):
+	progressBar.value = music.get_playback_position()
+	if slider_moving == false:
+		songSlider.value = music.get_playback_position()
+
+func _change_playlist_display_number():
+	$displayPlaylist.text = str(SaveData.currentNum)
 
 func _ready_shuffle():
 	if SaveData.shuffle == true:
 		musicArray.shuffle()
+		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "99e550"
 		print("shuffling")
 	else:
+		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "f25a5a"
 		print("not shuffling")
 
 #call when you change it to
@@ -62,6 +73,11 @@ func _on_volume_value_changed(value):
 	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
 	#print("volume is ", AudioServer.get_bus_volume_db(_bus))
 
+func _on_volume_slider_value_changed(value):
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
+	print("volume is ", $VolumeSlider.get_value())
+
+
 #start of music slider
 var slider_moving = false
 func _on_song_slider_drag_started():
@@ -81,9 +97,11 @@ func _on_shuffle_on_start_pressed():
 func _shuffle_on_start():
 	if SaveData.shuffle == true:
 		SaveData.shuffle = false
+		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "f25a5a"
 		print("SOS off")
 	else:
 		SaveData.shuffle = true
+		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "99e550"
 		musicArray.shuffle()
 		print("SOS on")
 	SaveData._save()
@@ -105,10 +123,7 @@ func _song_title(string):
 
 
 
-func _process(_delta):
-	progressBar.value = music.get_playback_position()
-	if slider_moving == false:
-		songSlider.value = music.get_playback_position()
+
 
 func _on_play_pressed():
 	if music.stream_paused == true:
@@ -258,12 +273,14 @@ func _on_loop_pressed():
 func _check_loop():
 	if SaveData.loop == true:
 		$buttonsContainer/loop.icon = load("res://assets/sprites/loop.png")
-		#print("looping true")
+		print("looping true")
 		$ButtonsContainer/loop.text = "loop true"
+		$settingsPanel/VBoxContainer/hbox2/TextureRect.modulate = "99e550"
 	else:
 		$buttonsContainer/loop.icon = load("res://assets/sprites/loopOff.png")
-		#print("looping off")
+		print("looping off")
 		$ButtonsContainer/loop.text = "loop off"
+		$settingsPanel/VBoxContainer/hbox2/TextureRect.modulate = "f25a5a"
 
 func _toast(text):
 	var toastMake = toast.new()
@@ -323,4 +340,12 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
+
+
+
+func _on_settings_button_pressed():
+	$settingsPanel.visible = true
+
+func _on_close_settings_pressed():
+	$settingsPanel.visible = false
 

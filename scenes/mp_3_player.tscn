@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://b67iudoilamu4"]
+[gd_scene load_steps=18 format=3 uid="uid://b67iudoilamu4"]
 
 [ext_resource type="Script" path="res://assets/scripts/MP3Player.gd" id="1_g3eqe"]
 [ext_resource type="Theme" uid="uid://emdmhnbaqay1" path="res://resources/themes/blueButtonTheme.tres" id="2_cxls3"]
@@ -12,6 +12,40 @@
 [ext_resource type="Theme" uid="uid://ccxegmojnss2" path="res://resources/themes/30font.tres" id="10_kmh5g"]
 [ext_resource type="PackedScene" uid="uid://dqed5caxe0u53" path="res://scenes/ui_song_display.tscn" id="11_hrs78"]
 [ext_resource type="PackedScene" uid="uid://cg6w6dq50qp4" path="res://scenes/playlists.tscn" id="12_37i8v"]
+[ext_resource type="Texture2D" uid="uid://c60wphjexvni4" path="res://assets/sprites/settingButtons.png" id="14_88b6h"]
+[ext_resource type="Texture2D" uid="uid://yrf2a5yh2pwg" path="res://assets/sprites/settingsIndicator.png" id="15_grrxf"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w8fk"]
+bg_color = Color(0.0509804, 0.0509804, 0.0509804, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ncb4g"]
+bg_color = Color(0.509804, 0.509804, 0.509804, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.309804, 0.309804, 0.309804, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+expand_margin_left = 50.0
+expand_margin_right = 50.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_38cbq"]
+bg_color = Color(0.709804, 0.709804, 0.709804, 1)
+border_width_bottom = 6
+border_color = Color(0.309804, 0.309804, 0.309804, 1)
+corner_radius_top_left = 30
+corner_radius_top_right = 30
+corner_radius_bottom_right = 30
+corner_radius_bottom_left = 30
+expand_margin_left = 44.0
+expand_margin_right = 44.0
 
 [node name="MP3Player" type="Control"]
 layout_mode = 3
@@ -29,8 +63,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.219608, 0.219608, 0.219608, 1)
 
 [node name="shuffleOnStart" type="Button" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -49,6 +85,7 @@ text = "shuffle on start"
 bus = &"Music"
 
 [node name="ProgressBar" type="ProgressBar" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -63,7 +100,8 @@ grow_horizontal = 2
 grow_vertical = 2
 show_percentage = false
 
-[node name="songSlider" type="HSlider" parent="."]
+[node name="songSliderOld" type="HSlider" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -78,6 +116,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ButtonsContainer" type="HBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -126,25 +165,34 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -47.0
-offset_top = -136.0
-offset_right = 76.0
-offset_bottom = -96.0
+offset_left = -38.0
+offset_top = -45.5
+offset_right = 381.0
+offset_bottom = 45.5
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5w8fk")
+follow_focus = true
 vertical_scroll_mode = 0
 
 [node name="songLabel" type="Label" parent="ScrollContainer"]
 layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0.85098, 0.85098, 0.85098, 1)
+theme_override_font_sizes/font_size = 60
 text = "current Song big song name"
 horizontal_alignment = 1
+
+[node name="displaySongs" type="Button" parent="ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 
 [node name="scrollTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
 
 [node name="volume" type="HSlider" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -161,16 +209,17 @@ min_value = -80.0
 max_value = 0.0
 
 [node name="buttonsContainer" type="HBoxContainer" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -87.0
-offset_top = 158.0
-offset_right = 77.0
-offset_bottom = 238.0
+offset_left = -107.0
+offset_top = 156.0
+offset_right = 489.0
+offset_bottom = 236.0
 grow_horizontal = 2
 grow_vertical = 2
 theme = ExtResource("2_cxls3")
@@ -211,6 +260,166 @@ custom_minimum_size = Vector2(80, 80)
 layout_mode = 2
 icon = ExtResource("9_uwtu1")
 
+[node name="displaySongs" type="Button" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 84.0
+offset_top = 62.0
+offset_right = 92.0
+offset_bottom = 70.0
+theme = ExtResource("10_kmh5g")
+text = "display songs"
+
+[node name="displayPlaylist3" type="Button" parent="."]
+visible = false
+layout_mode = 1
+offset_left = 85.0
+offset_top = 133.0
+offset_right = 306.0
+offset_bottom = 183.0
+theme = ExtResource("10_kmh5g")
+text = "display playlist"
+
+[node name="VolumeSlider" type="VSlider" parent="."]
+layout_mode = 0
+offset_left = 1018.0
+offset_top = 149.0
+offset_right = 1118.0
+offset_bottom = 449.0
+theme_override_styles/slider = SubResource("StyleBoxFlat_ncb4g")
+theme_override_styles/grabber_area = SubResource("StyleBoxFlat_38cbq")
+theme_override_styles/grabber_area_highlight = SubResource("StyleBoxFlat_38cbq")
+min_value = -80.0
+max_value = 0.0
+
+[node name="songSlider" type="HSlider" parent="."]
+layout_mode = 0
+offset_left = 490.0
+offset_top = 409.0
+offset_right = 742.0
+offset_bottom = 425.0
+scale = Vector2(2, 2)
+
+[node name="settingsButton" type="Button" parent="."]
+layout_mode = 0
+offset_left = 7.0
+offset_top = 10.0
+offset_right = 265.0
+offset_bottom = 78.0
+icon = ExtResource("14_88b6h")
+flat = true
+
+[node name="displayPlaylist" type="Button" parent="."]
+layout_mode = 0
+offset_left = 49.0
+offset_top = 157.0
+offset_right = 415.0
+offset_bottom = 528.0
+theme = ExtResource("2_cxls3")
+theme_override_font_sizes/font_size = 200
+text = "1"
+
+[node name="settingsPanel" type="Panel" parent="."]
+visible = false
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 10.0
+offset_right = 389.0
+offset_bottom = -296.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="settingsPanel"]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 5.0
+offset_right = 375.0
+offset_bottom = 336.0
+
+[node name="closeSettings" type="Button" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Close"
+alignment = 0
+
+[node name="shuffle" type="Button" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Shuffle"
+alignment = 0
+
+[node name="refreshSong" type="Button" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Restart playlist"
+alignment = 0
+
+[node name="hbox2" type="HBoxContainer" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="settingsPanel/VBoxContainer/hbox2"]
+layout_mode = 2
+texture = ExtResource("15_grrxf")
+
+[node name="loop" type="Button" parent="settingsPanel/VBoxContainer/hbox2"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Loop"
+alignment = 0
+
+[node name="hbox" type="HBoxContainer" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="settingsPanel/VBoxContainer/hbox"]
+layout_mode = 2
+texture = ExtResource("15_grrxf")
+
+[node name="shuffleOnStart" type="Button" parent="settingsPanel/VBoxContainer/hbox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Shuffle on Start"
+alignment = 0
+
+[node name="newButtonsContainer" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 417.0
+offset_top = 438.0
+offset_right = 781.0
+offset_bottom = 526.0
+scale = Vector2(2, 2)
+
+[node name="back" type="Button" parent="newButtonsContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("4_8cjsa")
+flat = true
+
+[node name="play" type="Button" parent="newButtonsContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("5_d2k7o")
+flat = true
+
+[node name="pause" type="Button" parent="newButtonsContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("6_sa6jj")
+flat = true
+
+[node name="next" type="Button" parent="newButtonsContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("7_ilxhf")
+flat = true
+
+[node name="ui-SongDisplay" parent="." instance=ExtResource("11_hrs78")]
+visible = false
+layout_mode = 1
+
+[node name="playlists" parent="." instance=ExtResource("12_37i8v")]
+layout_mode = 1
+
 [node name="toastContainer" type="VBoxContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -226,36 +435,11 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[node name="displaySongs" type="Button" parent="."]
-layout_mode = 0
-offset_left = 84.0
-offset_top = 62.0
-offset_right = 92.0
-offset_bottom = 70.0
-theme = ExtResource("10_kmh5g")
-text = "display songs"
-
-[node name="displayPlaylist" type="Button" parent="."]
-layout_mode = 1
-offset_left = 85.0
-offset_top = 133.0
-offset_right = 306.0
-offset_bottom = 183.0
-theme = ExtResource("10_kmh5g")
-text = "display playlist"
-
-[node name="ui-SongDisplay" parent="." instance=ExtResource("11_hrs78")]
-visible = false
-layout_mode = 1
-
-[node name="playlists" parent="." instance=ExtResource("12_37i8v")]
-layout_mode = 1
-
 [connection signal="pressed" from="shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
 [connection signal="finished" from="music" to="." method="_on_music_finished"]
-[connection signal="drag_ended" from="songSlider" to="." method="_on_song_slider_drag_ended"]
-[connection signal="drag_started" from="songSlider" to="." method="_on_song_slider_drag_started"]
-[connection signal="value_changed" from="songSlider" to="." method="_on_song_slider_value_changed"]
+[connection signal="drag_ended" from="songSliderOld" to="." method="_on_song_slider_drag_ended"]
+[connection signal="drag_started" from="songSliderOld" to="." method="_on_song_slider_drag_started"]
+[connection signal="value_changed" from="songSliderOld" to="." method="_on_song_slider_value_changed"]
 [connection signal="pressed" from="ButtonsContainer/shuffle" to="." method="_on_shuffle_pressed"]
 [connection signal="pressed" from="ButtonsContainer/back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="ButtonsContainer/play" to="." method="_on_play_pressed"]
@@ -263,6 +447,7 @@ layout_mode = 1
 [connection signal="pressed" from="ButtonsContainer/foward" to="." method="_on_foward_pressed"]
 [connection signal="pressed" from="ButtonsContainer/loop" to="." method="_on_loop_pressed"]
 [connection signal="pressed" from="ButtonsContainer/resetSongs" to="." method="_on_reset_songs_pressed"]
+[connection signal="pressed" from="ScrollContainer/displaySongs" to="." method="_on_display_songs_pressed"]
 [connection signal="timeout" from="scrollTimer" to="." method="_on_scroll_timer_timeout"]
 [connection signal="value_changed" from="volume" to="." method="_on_volume_value_changed"]
 [connection signal="pressed" from="buttonsContainer/shuffle" to="." method="_on_shuffle_pressed"]
@@ -273,4 +458,19 @@ layout_mode = 1
 [connection signal="pressed" from="buttonsContainer/loop" to="." method="_on_loop_pressed"]
 [connection signal="pressed" from="buttonsContainer/refreshSong" to="." method="_on_refresh_song_pressed"]
 [connection signal="pressed" from="displaySongs" to="." method="_on_display_songs_pressed"]
+[connection signal="pressed" from="displayPlaylist3" to="." method="_on_display_playlist_pressed"]
+[connection signal="value_changed" from="VolumeSlider" to="." method="_on_volume_slider_value_changed"]
+[connection signal="drag_ended" from="songSlider" to="." method="_on_song_slider_drag_ended"]
+[connection signal="drag_started" from="songSlider" to="." method="_on_song_slider_drag_started"]
+[connection signal="value_changed" from="songSlider" to="." method="_on_song_slider_value_changed"]
+[connection signal="pressed" from="settingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="displayPlaylist" to="." method="_on_display_playlist_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/closeSettings" to="." method="_on_close_settings_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/shuffle" to="." method="_on_shuffle_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/refreshSong" to="." method="_on_refresh_song_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/hbox2/loop" to="." method="_on_loop_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/hbox/shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
+[connection signal="pressed" from="newButtonsContainer/back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="newButtonsContainer/play" to="." method="_on_play_pressed"]
+[connection signal="pressed" from="newButtonsContainer/pause" to="." method="_on_pause_pressed"]
+[connection signal="pressed" from="newButtonsContainer/next" to="." method="_on_next_pressed"]

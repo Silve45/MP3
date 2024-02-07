@@ -1,7 +1,7 @@
 class_name playlistButton
 extends Button
 var array = []
-
+var num
 #needs to be able to save array ( do this next time )
 
 func _ready():
@@ -12,6 +12,6 @@ func _ready():
 	SaveData.connect("changeNum", _changeNum)
 
 func _changeNum():
-	var num = get_index()
+	num = get_index()
 	print("new index is ", num)
 	text = str(num)

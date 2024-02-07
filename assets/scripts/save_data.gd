@@ -4,6 +4,7 @@ const save_playlist = "user://playlists.data"
 
 var shuffle = true
 var loop = false
+var currentNum = 0
 signal newButton
 signal changeNum
 var playlist_dict := {}
@@ -152,7 +153,8 @@ func create_player_data():
 	var player_dict = {
 		"LOOP": loop,
 		"SHUFFLE": shuffle,
-		"CURRENTPLAYLIST": currentPlaylist
+		"CURRENTPLAYLIST": currentPlaylist,
+		"CURRENTNUM": currentNum
 	}
 	return player_dict
 
@@ -163,6 +165,7 @@ func _load():
 		loop = loaded_player_data.LOOP
 		shuffle = loaded_player_data.SHUFFLE
 		currentPlaylist = loaded_player_data.CURRENTPLAYLIST
+		currentNum = loaded_player_data.CURRENTNUM
 		file.close()
 	else:
 		_save()

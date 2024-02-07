@@ -2,6 +2,7 @@ extends Control
 
 @onready var songNameLabel = $songName
 @onready var gridContainer = $Panel/ScrollContainer/GridContainer
+@onready var scrollContainer = $Panel/ScrollContainer
 
 var array = []
 signal sendSong
@@ -10,6 +11,12 @@ func _ready():
 	visible = false
 	Globals.connect("changeArray", _set_array)
 	_make_buttons()
+	_hide_scroll_bars()
+
+func _hide_scroll_bars():
+	scrollContainer.get_v_scroll_bar().modulate = Color(0, 0, 0, 0)
+	scrollContainer.get_v_scroll_bar().scale.x = 0 
+	scrollContainer.get_v_scroll_bar().scale.y = 0 
 
 func _set_array():
 	array = Globals.globalMusicArray

@@ -9,7 +9,8 @@ signal search
 func _ready():
 	texture_normal = load("res://assets/sprites/record.png")
 	var label = Label.new()
-	label.set_anchors_preset(Control.PRESET_CENTER_LEFT)
+	#label.set_anchors_preset(Control.PRESET_CENTER_LEFT)
+	label.position.y = 71
 	label.theme = load("res://resources/themes/toastTheme.tres") 
 	label.set_text(buttonName)
 	label.visible_characters = 11

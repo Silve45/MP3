@@ -12,9 +12,11 @@ extends Control
 var playlistArray = ["filler"]
 var currentArray = playlistArray # by default
 var currentButton
+var currentNum
 var addButton
 var addButtonON = false
 signal folders
+signal changeDisplay
 
 func _ready():
 	visible = false
@@ -31,6 +33,9 @@ func _select_playlist():
 	if currentButton.array.size() > 0:
 		SaveData.currentPlaylist = []
 		SaveData.currentPlaylist.append_array(currentButton.array) 
+		var numIs = currentButton.text
+		SaveData.currentNum = int(numIs)
+		emit_signal("changeDisplay")
 		SaveData._save()
 		buttonPlaylists.visible = false
 		#removes children so there are no duplicate buttons
@@ -73,6 +78,7 @@ func _add_playlist_button():
 func _playlist_edit_open(button2):
 	#print(button2.array)
 	currentButton = button2
+	currentNum = button2.num
 	currentArray = button2.array
 	_ready_playlist_array(button2.array)
 	buttonPlaylists.visible = true

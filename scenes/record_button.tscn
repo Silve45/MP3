@@ -9,8 +9,10 @@ script = ExtResource("2_2yfoa")
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
+offset_top = 71.0
+offset_right = 216.0
+offset_bottom = 94.0
+text = "dsafasdfedfsgfdagdfgdfgsgs"
 
 [connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
 [connection signal="pressed" from="." to="." method="_on_pressed"]
