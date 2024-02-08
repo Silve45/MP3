@@ -3,7 +3,10 @@ extends Control
 @onready var music = $music
 @onready var songLabel = $ScrollContainer/songLabel
 @onready var scrollContainer = $ScrollContainer
+@onready var smallSongLabel = $smallMode/ScrollContainer/songLabel
+@onready var smallScrollContainer = $smallMode/ScrollContainer
 @onready var scrollH = scrollContainer.get_h_scroll_bar()
+@onready var smallScrollH = smallScrollContainer.get_h_scroll_bar()
 @onready var scrollTimer = $scrollTimer
 @onready var songSlider = $songSlider
 @onready var toastContainer = $toastContainer
@@ -16,6 +19,18 @@ signal killTween
 var folderArray = ["C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"]
 var musicArray = []
 var musicGarabage = []
+
+var smallMode = false
+
+#func _input(event):
+	#if event.is_action_pressed("debug"):
+		##for i in 2:
+		#DisplayServer.window_set_size(Vector2i((1152/4), (648/4)))
+		##DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
+		##i+= 1
+		##print(i)
+	#smallMode = true
+	
 
 func _ready():
 	$playlists.connect("changeDisplay", _change_playlist_display_number)#just connects for later use
@@ -49,6 +64,15 @@ func _on_play_pressed():
 	if music.stream_paused == true:
 		music.stream_paused = false
 	else:
+		_play_test_song()
+
+func _on_small_pause_pressed():
+	if music.stream_paused == false:
+		music.stream_paused = true
+	else:
+		music.stream_paused = false
+	
+	if music.stream == null:
 		_play_test_song()
 
 func _on_pause_pressed():
@@ -176,6 +200,7 @@ func _force_song_change():#like set music but only called this for this
 		music.play()
 	_song_title(musicArray[0])
 	songLabel.set_text(_song_title(musicArray[0]))
+	smallSongLabel.set_text(_song_title(musicArray[0]))
 
 func _shuffle_on_start():#for shuffle on start button
 	if SaveData.shuffle == true:
@@ -195,6 +220,7 @@ func _hide_scroll_bars():
 	#scrollContainer.get_h_scroll_bar().scale.x = 0 
 	#scrollContainer.get_h_scroll_bar().scale.y = 0 
 	scrollContainer.set_horizontal_scroll_mode(3)
+	smallScrollContainer.set_horizontal_scroll_mode(3)
 
 func _song_title(string):
 	var bacon = string
@@ -230,6 +256,7 @@ func _set_music():
 	music.stream = load_mp3(musicArray[0])
 	_song_title(musicArray[0])
 	songLabel.set_text(_song_title(musicArray[0]))
+	smallSongLabel.set_text(_song_title(musicArray[0]))
 	#print("current song is, ", _song_title(musicArray[0]))
 	if musicGarabage.size() != 0:
 		print("last song is, ", _song_title(musicGarabage[0]))
@@ -242,16 +269,25 @@ func _on_scroll_timer_timeout():
 	_scroll()
 
 func _scroll():
-	var maxValue = scrollH.max_value
-	var tween = get_tree().create_tween()
-	tween.tween_property(scrollH, "value", maxValue, 5)
-	tween.connect("finished",_resetScroll)
-	await killTween#waits to see of kill tween is emitted
-	tween.kill()
+	if smallMode == false:
+		var maxValue = scrollH.max_value
+		var tween = get_tree().create_tween()
+		tween.tween_property(scrollH, "value", maxValue, 5)
+		tween.connect("finished",_resetScroll)
+		await killTween#waits to see of kill tween is emitted
+		tween.kill()
+	else:
+		var maxValue = smallScrollH.max_value
+		var tween = get_tree().create_tween()
+		tween.tween_property(smallScrollH, "value", maxValue, 5)
+		tween.connect("finished",_resetScroll)
+		await killTween#waits to see of kill tween is emitted
+		tween.kill()
 
 func _resetScroll():
 	emit_signal("killTween")
 	scrollH.value = 0
+	smallScrollH.value = 0
 	scrollTimer.start()
 
 func _play_test_song():
@@ -358,3 +394,4 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
+

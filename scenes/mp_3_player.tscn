@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b67iudoilamu4"]
+[gd_scene load_steps=15 format=3 uid="uid://b67iudoilamu4"]
 
 [ext_resource type="Script" path="res://assets/scripts/MP3Player.gd" id="1_g3eqe"]
 [ext_resource type="Theme" uid="uid://emdmhnbaqay1" path="res://resources/themes/blueButtonTheme.tres" id="2_cxls3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ck5gysmjrwd3b" path="res://assets/sprites/pause.png" id="6_sa6jj"]
 [ext_resource type="Texture2D" uid="uid://chc4pk2vrsw1t" path="res://assets/sprites/next.png" id="7_ilxhf"]
 [ext_resource type="PackedScene" uid="uid://dqed5caxe0u53" path="res://scenes/ui_song_display.tscn" id="11_hrs78"]
+[ext_resource type="Script" path="res://assets/scripts/moveAbleBackground.gd" id="11_lg7se"]
 [ext_resource type="PackedScene" uid="uid://cg6w6dq50qp4" path="res://scenes/playlists.tscn" id="12_37i8v"]
 [ext_resource type="Texture2D" uid="uid://c60wphjexvni4" path="res://assets/sprites/settingButtons.png" id="14_88b6h"]
 [ext_resource type="Texture2D" uid="uid://yrf2a5yh2pwg" path="res://assets/sprites/settingsIndicator.png" id="15_grrxf"]
@@ -275,6 +276,76 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
+[node name="smallMode" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="moveAbleBackground" type="ColorRect" parent="smallMode"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.219608, 0.219608, 0.219608, 1)
+script = ExtResource("11_lg7se")
+
+[node name="newButtonsContainer" type="HBoxContainer" parent="smallMode"]
+offset_left = 3.0
+offset_top = 193.0
+offset_right = 367.0
+offset_bottom = 281.0
+scale = Vector2(4, 4)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="back" type="Button" parent="smallMode/newButtonsContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("4_8cjsa")
+flat = true
+
+[node name="smallPause" type="Button" parent="smallMode/newButtonsContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("6_sa6jj")
+flat = true
+
+[node name="next" type="Button" parent="smallMode/newButtonsContainer"]
+texture_filter = 1
+layout_mode = 2
+icon = ExtResource("7_ilxhf")
+flat = true
+
+[node name="Control" type="Control" parent="smallMode"]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="ScrollContainer" type="ScrollContainer" parent="smallMode"]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -451.0
+offset_top = -296.0
+offset_right = -32.0
+offset_bottom = -205.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(2, 2)
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5w8fk")
+follow_focus = true
+vertical_scroll_mode = 0
+
+[node name="songLabel" type="Label" parent="smallMode/ScrollContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.85098, 0.85098, 0.85098, 1)
+theme_override_font_sizes/font_size = 60
+text = "current Song big song name"
+horizontal_alignment = 1
+
 [connection signal="finished" from="music" to="." method="_on_music_finished"]
 [connection signal="pressed" from="ScrollContainer/songLabel/displaySongs" to="." method="_on_display_songs_pressed"]
 [connection signal="timeout" from="scrollTimer" to="." method="_on_scroll_timer_timeout"]
@@ -295,3 +366,7 @@ mouse_filter = 2
 [connection signal="pressed" from="newButtonsContainer/play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="newButtonsContainer/pause" to="." method="_on_pause_pressed"]
 [connection signal="pressed" from="newButtonsContainer/next" to="." method="_on_next_pressed"]
+[connection signal="gui_input" from="smallMode/moveAbleBackground" to="smallMode/moveAbleBackground" method="_on_gui_input"]
+[connection signal="pressed" from="smallMode/newButtonsContainer/back" to="." method="_on_back_pressed"]
+[connection signal="pressed" from="smallMode/newButtonsContainer/smallPause" to="." method="_on_small_pause_pressed"]
+[connection signal="pressed" from="smallMode/newButtonsContainer/next" to="." method="_on_next_pressed"]
