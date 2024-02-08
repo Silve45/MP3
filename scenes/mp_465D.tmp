@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://b67iudoilamu4"]
+[gd_scene load_steps=15 format=3 uid="uid://b67iudoilamu4"]
 
 [ext_resource type="Script" path="res://assets/scripts/MP3Player.gd" id="1_g3eqe"]
 [ext_resource type="Theme" uid="uid://emdmhnbaqay1" path="res://resources/themes/blueButtonTheme.tres" id="2_cxls3"]
@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://ck5gysmjrwd3b" path="res://assets/sprites/pause.png" id="6_sa6jj"]
 [ext_resource type="Texture2D" uid="uid://chc4pk2vrsw1t" path="res://assets/sprites/next.png" id="7_ilxhf"]
 [ext_resource type="PackedScene" uid="uid://dqed5caxe0u53" path="res://scenes/ui_song_display.tscn" id="11_hrs78"]
+[ext_resource type="Script" path="res://assets/scripts/moveAbleBackground.gd" id="11_lg7se"]
 [ext_resource type="PackedScene" uid="uid://cg6w6dq50qp4" path="res://scenes/playlists.tscn" id="12_37i8v"]
 [ext_resource type="Texture2D" uid="uid://c60wphjexvni4" path="res://assets/sprites/settingButtons.png" id="14_88b6h"]
 [ext_resource type="Texture2D" uid="uid://yrf2a5yh2pwg" path="res://assets/sprites/settingsIndicator.png" id="15_grrxf"]
@@ -148,7 +149,7 @@ anchor_bottom = 1.0
 offset_left = 8.0
 offset_top = 10.0
 offset_right = 389.0
-offset_bottom = -85.0
+offset_bottom = -155.0
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="settingsPanel"]
@@ -168,12 +169,6 @@ alignment = 0
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Full Screen"
-alignment = 0
-
-[node name="smallMode" type="Button" parent="settingsPanel/VBoxContainer"]
-layout_mode = 2
-theme_override_font_sizes/font_size = 40
-text = "Small Mode"
 alignment = 0
 
 [node name="shuffle" type="Button" parent="settingsPanel/VBoxContainer"]
@@ -282,7 +277,6 @@ grow_vertical = 2
 mouse_filter = 2
 
 [node name="smallMode" type="CanvasLayer" parent="."]
-visible = false
 
 [node name="moveAbleBackground" type="ColorRect" parent="smallMode"]
 anchors_preset = 15
@@ -291,6 +285,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.219608, 0.219608, 0.219608, 1)
+script = ExtResource("11_lg7se")
 
 [node name="newButtonsContainer" type="HBoxContainer" parent="smallMode"]
 offset_left = 3.0
@@ -350,14 +345,6 @@ theme_override_font_sizes/font_size = 60
 text = "current Song big song name"
 horizontal_alignment = 1
 
-[node name="undoSmallMode" type="Button" parent="smallMode/ScrollContainer/songLabel"]
-layout_mode = 2
-offset_right = 2436.0
-offset_bottom = 83.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-flat = true
-
 [connection signal="finished" from="music" to="." method="_on_music_finished"]
 [connection signal="pressed" from="ScrollContainer/songLabel/displaySongs" to="." method="_on_display_songs_pressed"]
 [connection signal="timeout" from="scrollTimer" to="." method="_on_scroll_timer_timeout"]
@@ -369,7 +356,6 @@ flat = true
 [connection signal="pressed" from="displayPlaylist" to="." method="_on_display_playlist_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/closeSettings" to="." method="_on_close_settings_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/fullScreen" to="." method="_on_full_screen_pressed"]
-[connection signal="pressed" from="settingsPanel/VBoxContainer/smallMode" to="." method="_on_small_mode_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/shuffle" to="." method="_on_shuffle_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/refreshSong" to="." method="_on_refresh_song_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/hbox2/loop" to="." method="_on_loop_pressed"]
@@ -379,7 +365,7 @@ flat = true
 [connection signal="pressed" from="newButtonsContainer/play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="newButtonsContainer/pause" to="." method="_on_pause_pressed"]
 [connection signal="pressed" from="newButtonsContainer/next" to="." method="_on_next_pressed"]
+[connection signal="gui_input" from="smallMode/moveAbleBackground" to="smallMode/moveAbleBackground" method="_on_gui_input"]
 [connection signal="pressed" from="smallMode/newButtonsContainer/back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="smallMode/newButtonsContainer/smallPause" to="." method="_on_small_pause_pressed"]
 [connection signal="pressed" from="smallMode/newButtonsContainer/next" to="." method="_on_next_pressed"]
-[connection signal="pressed" from="smallMode/ScrollContainer/songLabel/undoSmallMode" to="." method="_on_undo_small_mode_pressed"]

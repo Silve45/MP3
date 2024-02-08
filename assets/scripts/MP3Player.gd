@@ -11,6 +11,7 @@ extends Control
 @onready var songSlider = $songSlider
 @onready var toastContainer = $toastContainer
 @onready var uisongDisplay = $"ui-SongDisplay"
+@onready var smallModeDisplay = $smallMode
 
 @onready var sound = AudioStreamMP3.new()
 
@@ -19,18 +20,8 @@ signal killTween
 var folderArray = ["C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"]
 var musicArray = []
 var musicGarabage = []
-
 var smallMode = false
 
-#func _input(event):
-	#if event.is_action_pressed("debug"):
-		##for i in 2:
-		#DisplayServer.window_set_size(Vector2i((1152/4), (648/4)))
-		##DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_BORDERLESS, true)
-		##i+= 1
-		##print(i)
-	#smallMode = true
-	
 
 func _ready():
 	$playlists.connect("changeDisplay", _change_playlist_display_number)#just connects for later use
@@ -59,6 +50,12 @@ func _on_full_screen_pressed():
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	else:
 		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+
+func _on_small_mode_pressed():
+	_small_mode_set()
+
+func _on_undo_small_mode_pressed():
+	_small_mode_set()
 
 func _on_play_pressed():
 	if music.stream_paused == true:
@@ -158,6 +155,25 @@ func _check_play_on_switch():
 		$settingsPanel/VBoxContainer/hbox3/TextureRect.modulate = "f25a5a"
 
 #functions (Out of order right now)
+
+func _small_mode_set():
+	if smallMode == false:
+		smallModeDisplay.visible = true
+		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+		DisplayServer.window_set_size(Vector2i(1152/4, 648/4))
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
+		DisplayServer.window_set_flag(0, true)
+		smallMode = true
+	else:
+		smallModeDisplay.visible = false
+		DisplayServer.window_set_size(Vector2i(1152, 648))
+		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, false)
+		DisplayServer.window_set_flag(0, false)
+		smallMode = false
+
+
+
 func _change_playlist_display_number():
 	$displayPlaylist.text = str(SaveData.currentNum)
 
@@ -394,4 +410,10 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
+
+
+
+
+
+
 
