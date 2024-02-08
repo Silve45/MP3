@@ -5,13 +5,12 @@ const save_playlist = "user://playlists.data"
 var shuffle = true
 var loop = false
 var currentNum = 0
+var playOnSwitch = true
 signal newButton
 signal changeNum
 var playlist_dict := {}
-#var folderArray = ["C:/Users/silve/Downloads/fartNoise3"]
-var currentPlaylist = ["default playlist"]
-#needs to save the array. Do that next time! Super close :)
 
+var currentPlaylist = ["default playlist"]
 
 
 func _save_playlist(currentButton, vbox):
@@ -154,7 +153,8 @@ func create_player_data():
 		"LOOP": loop,
 		"SHUFFLE": shuffle,
 		"CURRENTPLAYLIST": currentPlaylist,
-		"CURRENTNUM": currentNum
+		"CURRENTNUM": currentNum,
+		"PLAYONSWITCH": playOnSwitch
 	}
 	return player_dict
 
@@ -166,6 +166,7 @@ func _load():
 		shuffle = loaded_player_data.SHUFFLE
 		currentPlaylist = loaded_player_data.CURRENTPLAYLIST
 		currentNum = loaded_player_data.CURRENTNUM
+		playOnSwitch = loaded_player_data.PLAYONSWITCH
 		file.close()
 	else:
 		_save()

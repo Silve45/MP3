@@ -10,7 +10,7 @@ signal sendSong
 func _ready():
 	visible = false
 	Globals.connect("changeArray", _set_array)
-	_make_buttons()
+	#_make_buttons()
 	_hide_scroll_bars()
 
 func _hide_scroll_bars():
@@ -38,12 +38,6 @@ func _make_buttons():
 		button.search.connect(_button_search.bind(button))
 		
 		gridContainer.add_child(button)
-		#
-		#if currentHboxContainer.get_child_count() < 5:
-			#currentHboxContainer.add_child(button)
-		#else:
-			#_make_new_hbox()
-			#currentHboxContainer.add_child(button)
 
 func _song_title(string):
 	var bacon = string
@@ -64,7 +58,6 @@ func _play_song(button):
 	emit_signal("sendSong")
 
 func _button_search(button):
-
 	var nameArray = []
 	for n in button.buttonName.length():
 		nameArray.append(button.buttonName[n].to_lower())
@@ -89,9 +82,5 @@ func _on_search_text_changed(new_text):
 	Globals.searchWord = new_text
 	Globals.emit_signal("forceSearch")
 
-
-
 func _on_close_pressed():
 	visible = false
-
-

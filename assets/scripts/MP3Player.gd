@@ -1,81 +1,103 @@
 extends Control
 
 @onready var music = $music
-@onready var progressBar = $ProgressBar
 @onready var songLabel = $ScrollContainer/songLabel
 @onready var scrollContainer = $ScrollContainer
 @onready var scrollH = scrollContainer.get_h_scroll_bar()
 @onready var scrollTimer = $scrollTimer
-@onready var volumeSlider = $volume
 @onready var songSlider = $songSlider
 @onready var toastContainer = $toastContainer
 @onready var uisongDisplay = $"ui-SongDisplay"
-#@onready var toastTimer = $toastVisiblityTimer
-#@onready var _bus := AudioServer.get_bus_index("Music")
 
 @onready var sound = AudioStreamMP3.new()
 
 signal killTween
 
-#"C:/Users/silve/Downloads/fartNoise","C:/Users/silve/Downloads/fartNoise2","C:/Users/silve/Downloads/fartNoise3"
 var folderArray = ["C:/Users/silve/Documents/0-Kdenlive/newClipsFolder/music/OtherSongs/slowPaced/"]
 var musicArray = []
 var musicGarabage = []
 
-
 func _ready():
-	$playlists.connect("changeDisplay", _change_playlist_display_number )
-	$playlists.connect("folders", _get_folders)
-	$"ui-SongDisplay".connect("sendSong",_play_selected_song )
-	SaveData._load()
-	_get_folders()
+	$playlists.connect("changeDisplay", _change_playlist_display_number)#just connects for later use
+	$playlists.connect("folders", _get_folders)#just connects for later use
+	$"ui-SongDisplay".connect("sendSong",_play_selected_song )#just connects for later use
+	SaveData._load()#loads save data
+	
+	_get_folders_ready()
 	_ready_shuffle()
 	_check_loop()
+	_check_play_on_switch()
 	_hide_scroll_bars()
 	_change_playlist_display_number()
 
-
 func _process(_delta):
-	progressBar.value = music.get_playback_position()
 	if slider_moving == false:
 		songSlider.value = music.get_playback_position()
 
-func _change_playlist_display_number():
-	$displayPlaylist.text = str(SaveData.currentNum)
 
-func _ready_shuffle():
-	if SaveData.shuffle == true:
-		musicArray.shuffle()
-		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "99e550"
-		print("shuffling")
+#all the button press functions
+func _on_shuffle_on_start_pressed():
+	_shuffle_on_start()
+
+func _on_full_screen_pressed():
+	if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 	else:
-		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "f25a5a"
-		print("not shuffling")
+		DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
 
-#call when you change it to
-func _get_folders():
-	for n in SaveData.currentPlaylist.size():
-		if musicArray.size() > 0:
-			musicArray.clear()
-		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
-		_ready_shuffle()
-		Globals._emit_change_array(musicArray)
+func _on_play_pressed():
+	if music.stream_paused == true:
+		music.stream_paused = false
+	else:
+		_play_test_song()
 
-#just makes it full screen if I press f
-func _input(event):#doesn't work right now0
-	if event.is_action_pressed("debug"):
-		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
+func _on_pause_pressed():
+	if music.stream_paused == false:
+		music.stream_paused = true
+	else:
+		music.stream_paused = false
+
+func _on_shuffle_pressed():
+	_shuffle()#only this here
+
+func _on_next_pressed():
+	print(" music garbage is ", musicGarabage)
+	_play_next_song()
+
+func _on_back_pressed():
+	print(" music garbage is ", musicGarabage)
+	_play_previous_song()
+
+func _on_refresh_song_pressed():
+	_re_add_songs()
+
+func _on_loop_pressed():
+	if sound != null:
+		if SaveData.loop == true:
+			sound.loop = false
+			SaveData.loop = false
+			_check_loop()
 		else:
-			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_FULLSCREEN)
+			sound.loop = true
+			SaveData.loop = true
+			_check_loop()
+		SaveData._save()
+	else:
+		print("sound is null")
 
-func _on_volume_value_changed(value):
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
-	#print("volume is ", AudioServer.get_bus_volume_db(_bus))
+func _on_display_songs_pressed():
+	uisongDisplay.visible = true
 
-func _on_volume_slider_value_changed(value):
-	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
-	print("volume is ", $VolumeSlider.get_value())
+func _on_display_playlist_pressed():
+	$playlists.visible = true
+	print("display")
+
+func _on_settings_button_pressed():
+	$settingsPanel.visible = true
+
+func _on_close_settings_pressed():
+	$settingsPanel.visible = false
+
 
 
 #start of music slider
@@ -91,10 +113,71 @@ func _on_song_slider_value_changed(value):
 		music.seek(value)
 #end of music slider
 
-func _on_shuffle_on_start_pressed():
-	_shuffle_on_start()
+func _on_volume_slider_value_changed(value):
+	AudioServer.set_bus_volume_db(AudioServer.get_bus_index("Music"), value)
+	print("volume is ", $VolumeSlider.get_value())
 
-func _shuffle_on_start():
+func _on_play_song_on_playlist_switch_pressed():
+	if SaveData.playOnSwitch == true:
+		SaveData.playOnSwitch = false
+		_check_play_on_switch()
+		SaveData._save()
+	else:
+		SaveData.playOnSwitch = true
+		_check_play_on_switch()
+		SaveData._save()
+
+func _check_play_on_switch():
+	if SaveData.playOnSwitch == true:
+		$settingsPanel/VBoxContainer/hbox3/TextureRect.modulate = "99e550"
+	else:
+		$settingsPanel/VBoxContainer/hbox3/TextureRect.modulate = "f25a5a"
+
+#functions (Out of order right now)
+func _change_playlist_display_number():
+	$displayPlaylist.text = str(SaveData.currentNum)
+
+func _ready_shuffle():
+	if SaveData.shuffle == true:
+		musicArray.shuffle()
+		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "99e550"
+		print("shuffling")
+	else:
+		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "f25a5a"
+		print("not shuffling")
+
+
+func _get_folders_ready():#this is the old one, so I can have my cake and eat it too
+	for n in SaveData.currentPlaylist.size():
+		if musicArray.size() > 0:
+			musicArray.clear()
+		if musicGarabage.size() > 0: #fixes bug where old song could still be played when swithing playist
+			musicGarabage.clear()
+		
+		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
+		
+		Globals._emit_change_array(musicArray)
+
+func _get_folders():
+	for n in SaveData.currentPlaylist.size():
+		if musicArray.size() > 0:
+			musicArray.clear()
+		if musicGarabage.size() > 0: #fixes bug where old song could still be played when swithing playist
+			musicGarabage.clear()
+		
+		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
+		_force_song_change() #should fix problem of switching playlists
+		
+		Globals._emit_change_array(musicArray)
+
+func _force_song_change():#like set music but only called this for this
+	music.stream = load_mp3(musicArray[0])
+	if SaveData.playOnSwitch == true:
+		music.play()
+	_song_title(musicArray[0])
+	songLabel.set_text(_song_title(musicArray[0]))
+
+func _shuffle_on_start():#for shuffle on start button
 	if SaveData.shuffle == true:
 		SaveData.shuffle = false
 		$settingsPanel/VBoxContainer/hbox/TextureRect.modulate = "f25a5a"
@@ -107,9 +190,11 @@ func _shuffle_on_start():
 	SaveData._save()
 
 func _hide_scroll_bars():
-	scrollContainer.get_h_scroll_bar().modulate = Color(0, 0, 0, 0)
-	scrollContainer.get_h_scroll_bar().scale.x = 0 
-	scrollContainer.get_h_scroll_bar().scale.y = 0 
+	#old
+	#scrollContainer.get_h_scroll_bar().modulate = Color(0, 0, 0, 0)
+	#scrollContainer.get_h_scroll_bar().scale.x = 0 
+	#scrollContainer.get_h_scroll_bar().scale.y = 0 
+	scrollContainer.set_horizontal_scroll_mode(3)
 
 func _song_title(string):
 	var bacon = string
@@ -117,36 +202,9 @@ func _song_title(string):
 	var title = bacon.right(-(num + 1))
 	var num2 = title.rfind('.')
 	var newTitle = title.left(num2)
-	#print(newTitle)
-	
 	return newTitle
 
-
-
-
-
-func _on_play_pressed():
-	if music.stream_paused == true:
-		music.stream_paused = false
-	else:
-		_play_test_song()
-
-func _on_foward_pressed():
-	_play_next_song()
-
-func _on_pause_pressed():
-	if music.stream_paused == false:
-		music.stream_paused = true
-	else:
-		music.stream_paused = false
-
-func _on_reset_songs_pressed():
-	_re_add_songs()
-
-func _on_shuffle_pressed():
-	_suffle()#only this here
-
-func _suffle():
+func _shuffle():
 	musicGarabage.insert(0, musicArray[0])
 	musicArray.shuffle()
 	if musicArray.size() != 0:
@@ -154,20 +212,6 @@ func _suffle():
 		music.play()
 	elif musicArray.size() == 0:
 		_re_add_songs()
-
-
-func _on_next_pressed():
-	print(" music garbage is ", musicGarabage)
-	_play_next_song()
-
-func _on_back_pressed():
-	print(" music garbage is ", musicGarabage)
-	_play_previous_song()
-
-func _on_refresh_song_pressed():
-	_re_add_songs()
-
-
 
 func _play_previous_song():
 	if musicGarabage.size() != 0:
@@ -192,7 +236,6 @@ func _set_music():
 	
 	_resetScroll()
 	var length = music.stream.get_length()
-	progressBar.max_value = length
 	songSlider.max_value = length
 
 func _on_scroll_timer_timeout():
@@ -236,7 +279,6 @@ func _play_selected_song():
 		_set_music()
 		music.play()
 
-
 func _play_next_song():
 	if musicArray.size() != 0:
 		#print("next is, ", musicArray )
@@ -250,51 +292,27 @@ func _play_next_song():
 func _re_add_songs():
 	musicArray.append_array(musicGarabage)
 	musicGarabage.clear()
-	#musicArray.shuffle()# maybe move this to shuffle
 	_set_music()
 	music.play()
 
-
-
-func _on_loop_pressed():
-	if sound != null:
-		if SaveData.loop == true:
-			sound.loop = false
-			SaveData.loop = false
-			_check_loop()
-		else:
-			sound.loop = true
-			SaveData.loop = true
-			_check_loop()
-		SaveData._save()
-	else:
-		print("sound is null")
-
 func _check_loop():
 	if SaveData.loop == true:
-		$buttonsContainer/loop.icon = load("res://assets/sprites/loop.png")
 		print("looping true")
-		$ButtonsContainer/loop.text = "loop true"
 		$settingsPanel/VBoxContainer/hbox2/TextureRect.modulate = "99e550"
 	else:
-		$buttonsContainer/loop.icon = load("res://assets/sprites/loopOff.png")
 		print("looping off")
-		$ButtonsContainer/loop.text = "loop off"
 		$settingsPanel/VBoxContainer/hbox2/TextureRect.modulate = "f25a5a"
 
+
+
+#error message toasts
 func _toast(text):
 	var toastMake = toast.new()
 	toastMake._toast(text)
 	toastContainer.add_child(toastMake)
 
-func _on_display_songs_pressed():
-	uisongDisplay.visible = true
-
-func _on_display_playlist_pressed():
-	$playlists.visible = true
-	print("display")
-
 #____________________________
+#gets the mp3 files from the path
 func load_mp3(path):
 	var file = FileAccess.open(path, FileAccess.READ)
 	sound = AudioStreamMP3.new()#this fixed the crashing problem
@@ -340,12 +358,3 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
-
-
-
-func _on_settings_button_pressed():
-	$settingsPanel.visible = true
-
-func _on_close_settings_pressed():
-	$settingsPanel.visible = false
-

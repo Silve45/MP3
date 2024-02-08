@@ -1,15 +1,11 @@
-[gd_scene load_steps=18 format=3 uid="uid://b67iudoilamu4"]
+[gd_scene load_steps=14 format=3 uid="uid://b67iudoilamu4"]
 
 [ext_resource type="Script" path="res://assets/scripts/MP3Player.gd" id="1_g3eqe"]
 [ext_resource type="Theme" uid="uid://emdmhnbaqay1" path="res://resources/themes/blueButtonTheme.tres" id="2_cxls3"]
-[ext_resource type="Texture2D" uid="uid://dmngple02kux2" path="res://assets/sprites/shuffle.png" id="3_jt34i"]
 [ext_resource type="Texture2D" uid="uid://bidp3bo18ip6k" path="res://assets/sprites/skip.png" id="4_8cjsa"]
 [ext_resource type="Texture2D" uid="uid://d12u6t52a1obn" path="res://assets/sprites/play.png" id="5_d2k7o"]
 [ext_resource type="Texture2D" uid="uid://ck5gysmjrwd3b" path="res://assets/sprites/pause.png" id="6_sa6jj"]
 [ext_resource type="Texture2D" uid="uid://chc4pk2vrsw1t" path="res://assets/sprites/next.png" id="7_ilxhf"]
-[ext_resource type="Texture2D" uid="uid://c0wgpbxq0kjk7" path="res://assets/sprites/loop.png" id="8_cv1b7"]
-[ext_resource type="Texture2D" uid="uid://cy4m3gbwvvg5m" path="res://assets/sprites/refreshSongs.png" id="9_uwtu1"]
-[ext_resource type="Theme" uid="uid://ccxegmojnss2" path="res://resources/themes/30font.tres" id="10_kmh5g"]
 [ext_resource type="PackedScene" uid="uid://dqed5caxe0u53" path="res://scenes/ui_song_display.tscn" id="11_hrs78"]
 [ext_resource type="PackedScene" uid="uid://cg6w6dq50qp4" path="res://scenes/playlists.tscn" id="12_37i8v"]
 [ext_resource type="Texture2D" uid="uid://c60wphjexvni4" path="res://assets/sprites/settingButtons.png" id="14_88b6h"]
@@ -65,98 +61,8 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.219608, 0.219608, 0.219608, 1)
 
-[node name="shuffleOnStart" type="Button" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -31.0
-offset_top = -185.0
-offset_right = 31.0
-offset_bottom = -145.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "shuffle on start"
-
 [node name="music" type="AudioStreamPlayer" parent="."]
 bus = &"Music"
-
-[node name="ProgressBar" type="ProgressBar" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -426.0
-offset_top = -13.5
-offset_right = 426.0
-offset_bottom = 13.5
-grow_horizontal = 2
-grow_vertical = 2
-show_percentage = false
-
-[node name="songSliderOld" type="HSlider" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -523.0
-offset_top = 25.0
-offset_right = 523.0
-offset_bottom = 41.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ButtonsContainer" type="HBoxContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 110.0
-offset_right = 20.0
-offset_bottom = 150.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="shuffle" type="Button" parent="ButtonsContainer"]
-layout_mode = 2
-text = "shuffle"
-
-[node name="back" type="Button" parent="ButtonsContainer"]
-layout_mode = 2
-text = "back"
-
-[node name="play" type="Button" parent="ButtonsContainer"]
-layout_mode = 2
-text = "play"
-
-[node name="pause" type="Button" parent="ButtonsContainer"]
-layout_mode = 2
-text = "pause"
-
-[node name="foward" type="Button" parent="ButtonsContainer"]
-layout_mode = 2
-text = "next"
-
-[node name="loop" type="Button" parent="ButtonsContainer"]
-layout_mode = 2
-text = "loop"
-
-[node name="resetSongs" type="Button" parent="ButtonsContainer"]
-layout_mode = 2
-text = "reset songs"
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 layout_mode = 1
@@ -171,6 +77,7 @@ offset_right = 381.0
 offset_bottom = 45.5
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_5w8fk")
 follow_focus = true
 vertical_scroll_mode = 0
@@ -182,103 +89,17 @@ theme_override_font_sizes/font_size = 60
 text = "current Song big song name"
 horizontal_alignment = 1
 
-[node name="displaySongs" type="Button" parent="ScrollContainer"]
+[node name="displaySongs" type="Button" parent="ScrollContainer/songLabel"]
 layout_mode = 2
+offset_right = 4996.0
+offset_bottom = 83.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+flat = true
 
 [node name="scrollTimer" type="Timer" parent="."]
 wait_time = 3.0
 one_shot = true
-
-[node name="volume" type="HSlider" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -400.0
-offset_top = 48.0
-offset_right = 400.0
-offset_bottom = 64.0
-grow_horizontal = 2
-grow_vertical = 2
-min_value = -80.0
-max_value = 0.0
-
-[node name="buttonsContainer" type="HBoxContainer" parent="."]
-visible = false
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -107.0
-offset_top = 156.0
-offset_right = 489.0
-offset_bottom = 236.0
-grow_horizontal = 2
-grow_vertical = 2
-theme = ExtResource("2_cxls3")
-theme_override_constants/separation = 6
-
-[node name="shuffle" type="Button" parent="buttonsContainer"]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-icon = ExtResource("3_jt34i")
-
-[node name="back" type="Button" parent="buttonsContainer"]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-icon = ExtResource("4_8cjsa")
-
-[node name="play" type="Button" parent="buttonsContainer"]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-icon = ExtResource("5_d2k7o")
-
-[node name="pause" type="Button" parent="buttonsContainer"]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-icon = ExtResource("6_sa6jj")
-
-[node name="next" type="Button" parent="buttonsContainer"]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-icon = ExtResource("7_ilxhf")
-
-[node name="loop" type="Button" parent="buttonsContainer"]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-icon = ExtResource("8_cv1b7")
-
-[node name="refreshSong" type="Button" parent="buttonsContainer"]
-custom_minimum_size = Vector2(80, 80)
-layout_mode = 2
-icon = ExtResource("9_uwtu1")
-
-[node name="displaySongs" type="Button" parent="."]
-visible = false
-layout_mode = 0
-offset_left = 84.0
-offset_top = 62.0
-offset_right = 92.0
-offset_bottom = 70.0
-theme = ExtResource("10_kmh5g")
-text = "display songs"
-
-[node name="displayPlaylist3" type="Button" parent="."]
-visible = false
-layout_mode = 1
-offset_left = 85.0
-offset_top = 133.0
-offset_right = 306.0
-offset_bottom = 183.0
-theme = ExtResource("10_kmh5g")
-text = "display playlist"
 
 [node name="VolumeSlider" type="VSlider" parent="."]
 layout_mode = 0
@@ -317,7 +138,7 @@ offset_right = 415.0
 offset_bottom = 528.0
 theme = ExtResource("2_cxls3")
 theme_override_font_sizes/font_size = 200
-text = "1"
+text = "-1"
 
 [node name="settingsPanel" type="Panel" parent="."]
 visible = false
@@ -327,7 +148,7 @@ anchor_bottom = 1.0
 offset_left = 8.0
 offset_top = 10.0
 offset_right = 389.0
-offset_bottom = -296.0
+offset_bottom = -155.0
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="settingsPanel"]
@@ -341,6 +162,12 @@ offset_bottom = 336.0
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Close"
+alignment = 0
+
+[node name="fullScreen" type="Button" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Full Screen"
 alignment = 0
 
 [node name="shuffle" type="Button" parent="settingsPanel/VBoxContainer"]
@@ -379,6 +206,19 @@ texture = ExtResource("15_grrxf")
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Shuffle on Start"
+alignment = 0
+
+[node name="hbox3" type="HBoxContainer" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="settingsPanel/VBoxContainer/hbox3"]
+layout_mode = 2
+texture = ExtResource("15_grrxf")
+
+[node name="playSongOnPlaylistSwitch" type="Button" parent="settingsPanel/VBoxContainer/hbox3"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "Play on Switch"
 alignment = 0
 
 [node name="newButtonsContainer" type="HBoxContainer" parent="."]
@@ -435,30 +275,9 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 
-[connection signal="pressed" from="shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
 [connection signal="finished" from="music" to="." method="_on_music_finished"]
-[connection signal="drag_ended" from="songSliderOld" to="." method="_on_song_slider_drag_ended"]
-[connection signal="drag_started" from="songSliderOld" to="." method="_on_song_slider_drag_started"]
-[connection signal="value_changed" from="songSliderOld" to="." method="_on_song_slider_value_changed"]
-[connection signal="pressed" from="ButtonsContainer/shuffle" to="." method="_on_shuffle_pressed"]
-[connection signal="pressed" from="ButtonsContainer/back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="ButtonsContainer/play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="ButtonsContainer/pause" to="." method="_on_pause_pressed"]
-[connection signal="pressed" from="ButtonsContainer/foward" to="." method="_on_foward_pressed"]
-[connection signal="pressed" from="ButtonsContainer/loop" to="." method="_on_loop_pressed"]
-[connection signal="pressed" from="ButtonsContainer/resetSongs" to="." method="_on_reset_songs_pressed"]
-[connection signal="pressed" from="ScrollContainer/displaySongs" to="." method="_on_display_songs_pressed"]
+[connection signal="pressed" from="ScrollContainer/songLabel/displaySongs" to="." method="_on_display_songs_pressed"]
 [connection signal="timeout" from="scrollTimer" to="." method="_on_scroll_timer_timeout"]
-[connection signal="value_changed" from="volume" to="." method="_on_volume_value_changed"]
-[connection signal="pressed" from="buttonsContainer/shuffle" to="." method="_on_shuffle_pressed"]
-[connection signal="pressed" from="buttonsContainer/back" to="." method="_on_back_pressed"]
-[connection signal="pressed" from="buttonsContainer/play" to="." method="_on_play_pressed"]
-[connection signal="pressed" from="buttonsContainer/pause" to="." method="_on_pause_pressed"]
-[connection signal="pressed" from="buttonsContainer/next" to="." method="_on_next_pressed"]
-[connection signal="pressed" from="buttonsContainer/loop" to="." method="_on_loop_pressed"]
-[connection signal="pressed" from="buttonsContainer/refreshSong" to="." method="_on_refresh_song_pressed"]
-[connection signal="pressed" from="displaySongs" to="." method="_on_display_songs_pressed"]
-[connection signal="pressed" from="displayPlaylist3" to="." method="_on_display_playlist_pressed"]
 [connection signal="value_changed" from="VolumeSlider" to="." method="_on_volume_slider_value_changed"]
 [connection signal="drag_ended" from="songSlider" to="." method="_on_song_slider_drag_ended"]
 [connection signal="drag_started" from="songSlider" to="." method="_on_song_slider_drag_started"]
@@ -466,10 +285,12 @@ mouse_filter = 2
 [connection signal="pressed" from="settingsButton" to="." method="_on_settings_button_pressed"]
 [connection signal="pressed" from="displayPlaylist" to="." method="_on_display_playlist_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/closeSettings" to="." method="_on_close_settings_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/fullScreen" to="." method="_on_full_screen_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/shuffle" to="." method="_on_shuffle_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/refreshSong" to="." method="_on_refresh_song_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/hbox2/loop" to="." method="_on_loop_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/hbox/shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/hbox3/playSongOnPlaylistSwitch" to="." method="_on_play_song_on_playlist_switch_pressed"]
 [connection signal="pressed" from="newButtonsContainer/back" to="." method="_on_back_pressed"]
 [connection signal="pressed" from="newButtonsContainer/play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="newButtonsContainer/pause" to="." method="_on_pause_pressed"]
