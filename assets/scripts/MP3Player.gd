@@ -205,12 +205,18 @@ func _get_folders():
 		if musicGarabage.size() > 0: #fixes bug where old song could still be played when swithing playist
 			musicGarabage.clear()
 		
+
 		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
-		_force_song_change() #should fix problem of switching playlists
+
 		
 		Globals._emit_change_array(musicArray)
+		_force_song_change() #should fix problem of switching playlists
 
 func _force_song_change():#like set music but only called this for this
+	if SaveData.shuffle == true: #if shuffle on start is true when you SWITCH playlist it will be random
+		musicArray.shuffle()
+	else:
+		pass
 	music.stream = load_mp3(musicArray[0])
 	if SaveData.playOnSwitch == true:
 		music.play()
