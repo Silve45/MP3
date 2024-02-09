@@ -29,12 +29,14 @@ func _ready():
 	$"ui-SongDisplay".connect("sendSong",_play_selected_song )#just connects for later use
 	SaveData._load()#loads save data
 	
+	
 	_get_folders_ready()
 	_ready_shuffle()
 	_check_loop()
 	_check_play_on_switch()
 	_hide_scroll_bars()
 	_change_playlist_display_number()
+	
 
 func _process(_delta):
 	if slider_moving == false:
@@ -188,29 +190,23 @@ func _ready_shuffle():
 
 
 func _get_folders_ready():#this is the old one, so I can have my cake and eat it too
+	if musicArray.size() > 0:
+		musicArray.clear()
+	if musicGarabage.size() > 0: #fixes bug where old song could still be played when swithing playist
+		musicGarabage.clear()
 	for n in SaveData.currentPlaylist.size():
-		if musicArray.size() > 0:
-			musicArray.clear()
-		if musicGarabage.size() > 0: #fixes bug where old song could still be played when swithing playist
-			musicGarabage.clear()
-		
 		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
-		
-		Globals._emit_change_array(musicArray)
+	Globals._emit_change_array(musicArray)
 
 func _get_folders():
+	if musicArray.size() > 0:
+		musicArray.clear()
+	if musicGarabage.size() > 0: #fixes bug where old song could still be played when swithing playist
+		musicGarabage.clear()
 	for n in SaveData.currentPlaylist.size():
-		if musicArray.size() > 0:
-			musicArray.clear()
-		if musicGarabage.size() > 0: #fixes bug where old song could still be played when swithing playist
-			musicGarabage.clear()
-		
-
 		get_dir_contents(musicArray, SaveData.currentPlaylist[n])
-
-		
-		Globals._emit_change_array(musicArray)
-		_force_song_change() #should fix problem of switching playlists
+	Globals._emit_change_array(musicArray)
+	_force_song_change() #should fix problem of switching playlists
 
 func _force_song_change():#like set music but only called this for this
 	if SaveData.shuffle == true: #if shuffle on start is true when you SWITCH playlist it will be random
