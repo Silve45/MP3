@@ -158,10 +158,14 @@ func _check_play_on_switch():
 
 #functions (Out of order right now)
 
+func _input(event):
+	if event.is_action_pressed("debug"):
+		print("bacon ", DisplayServer.window_get_mode())
+
 func _small_mode_set():
 	if smallMode == false:
 		smallModeDisplay.visible = true
-		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN:
+		if DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_FULLSCREEN || DisplayServer.window_get_mode() == DisplayServer.WINDOW_MODE_MAXIMIZED:
 			DisplayServer.window_set_mode(DisplayServer.WINDOW_MODE_WINDOWED)
 		DisplayServer.window_set_size(Vector2i(1152/4, 648/4))
 		DisplayServer.window_set_flag(DisplayServer.WINDOW_FLAG_ALWAYS_ON_TOP, true)
