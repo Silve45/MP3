@@ -6,6 +6,7 @@ var shuffle = true
 var loop = false
 var currentNum = 0
 var playOnSwitch = true
+var soundBoard = false
 signal newButton
 signal changeNum
 var playlist_dict := {}
@@ -154,7 +155,8 @@ func create_player_data():
 		"SHUFFLE": shuffle,
 		"CURRENTPLAYLIST": currentPlaylist,
 		"CURRENTNUM": currentNum,
-		"PLAYONSWITCH": playOnSwitch
+		"PLAYONSWITCH": playOnSwitch,
+		"SOUNDBOARD" : soundBoard
 	}
 	return player_dict
 
@@ -167,6 +169,7 @@ func _load():
 		currentPlaylist = loaded_player_data.CURRENTPLAYLIST
 		currentNum = loaded_player_data.CURRENTNUM
 		playOnSwitch = loaded_player_data.PLAYONSWITCH
+		soundBoard = loaded_player_data.SOUNDBOARD
 		file.close()
 	else:
 		_save()

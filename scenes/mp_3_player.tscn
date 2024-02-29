@@ -156,7 +156,7 @@ anchor_bottom = 1.0
 offset_left = 8.0
 offset_top = 10.0
 offset_right = 389.0
-offset_bottom = -85.0
+offset_bottom = -22.0
 grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="settingsPanel"]
@@ -207,6 +207,19 @@ texture = ExtResource("15_grrxf")
 layout_mode = 2
 theme_override_font_sizes/font_size = 40
 text = "Loop"
+alignment = 0
+
+[node name="hbox4" type="HBoxContainer" parent="settingsPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="settingsPanel/VBoxContainer/hbox4"]
+layout_mode = 2
+texture = ExtResource("15_grrxf")
+
+[node name="soundBoard" type="Button" parent="settingsPanel/VBoxContainer/hbox4"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+text = "SoundBoard"
 alignment = 0
 
 [node name="hbox" type="HBoxContainer" parent="settingsPanel/VBoxContainer"]
@@ -388,6 +401,7 @@ flat = true
 [connection signal="pressed" from="settingsPanel/VBoxContainer/shuffle" to="." method="_on_shuffle_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/refreshSong" to="." method="_on_refresh_song_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/hbox2/loop" to="." method="_on_loop_pressed"]
+[connection signal="pressed" from="settingsPanel/VBoxContainer/hbox4/soundBoard" to="." method="_on_sound_board_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/hbox/shuffleOnStart" to="." method="_on_shuffle_on_start_pressed"]
 [connection signal="pressed" from="settingsPanel/VBoxContainer/hbox3/playSongOnPlaylistSwitch" to="." method="_on_play_song_on_playlist_switch_pressed"]
 [connection signal="pressed" from="newButtonsContainer/back" to="." method="_on_back_pressed"]

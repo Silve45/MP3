@@ -14,7 +14,11 @@ config/name="MP3"
 config/tags=PackedStringArray("in_progress")
 run/main_scene="res://scenes/mp_3_player.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
+boot_splash/bg_color=Color(0.0509804, 0.0509804, 0.0509804, 1)
+boot_splash/image="res://icon.png"
+boot_splash/fullsize=false
 config/icon="res://icon.png"
+config/windows_native_icon="res://icon.ico"
 
 [autoload]
 

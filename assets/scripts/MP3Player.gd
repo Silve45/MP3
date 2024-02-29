@@ -33,6 +33,7 @@ func _ready():
 	_get_folders_ready()
 	_ready_shuffle()
 	_check_loop()
+	_check_sound_board()
 	_check_play_on_switch()
 	_hide_scroll_bars()
 	_change_playlist_display_number()
@@ -95,18 +96,34 @@ func _on_refresh_song_pressed():
 	_re_add_songs()
 
 func _on_loop_pressed():
-	if sound != null:
-		if SaveData.loop == true:
-			sound.loop = false
-			SaveData.loop = false
-			_check_loop()
-		else:
-			sound.loop = true
-			SaveData.loop = true
-			_check_loop()
-		SaveData._save()
+	if SaveData.soundBoard == true:# makes sure you can't turn loop on
+		SaveData.loop = false
+		sound.loop = false #forgot I had to set it like this as well
 	else:
-		print("sound is null")
+		if sound != null:
+			if SaveData.loop == true:
+				sound.loop = false
+				SaveData.loop = false
+				_check_loop()
+			else:
+				sound.loop = true
+				SaveData.loop = true
+				_check_loop()
+			SaveData._save()
+		else:
+			print("sound is null")
+
+func _on_sound_board_pressed():
+	if SaveData.soundBoard == true:
+		SaveData.soundBoard = false
+		_check_sound_board()
+	else:
+		SaveData.soundBoard = true
+		SaveData.loop = false
+		sound.loop = false#forgot I had to set it like this as well
+		_check_loop()
+		_check_sound_board()
+	SaveData._save()
 
 func _on_display_songs_pressed():
 	uisongDisplay.visible = true
@@ -323,7 +340,8 @@ func _on_music_finished():
 		print("redo")
 		_re_add_songs()
 	_set_music()
-	music.play()
+	if SaveData.soundBoard == false: #so if it is in soundBoardMode, it won't play automatically
+		music.play()
 
 	#print(musicArray.size())
 
@@ -361,6 +379,13 @@ func _check_loop():
 		print("looping off")
 		$settingsPanel/VBoxContainer/hbox2/TextureRect.modulate = "f25a5a"
 
+func _check_sound_board():
+	if SaveData.soundBoard == true:
+		print("soundboard true")
+		$settingsPanel/VBoxContainer/hbox4/TextureRect.modulate = "99e550"
+	else:
+		print("soundboard false")
+		$settingsPanel/VBoxContainer/hbox4/TextureRect.modulate = "f25a5a"
 
 
 #error message toasts
@@ -416,6 +441,9 @@ func _add_dir_contents(dir: DirAccess, files: Array, directories: Array):
 		file_name = dir.get_next()
 
 	dir.list_dir_end()
+
+
+
 
 
 
