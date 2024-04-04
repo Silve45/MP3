@@ -58,25 +58,17 @@ func _play_song(button):
 	emit_signal("sendSong")
 
 func _button_search(button):
-	var nameArray = []
-	for n in button.buttonName.length():
-		nameArray.append(button.buttonName[n].to_lower())
+	var name = button.buttonName.to_lower()
 	
-	var searchArray = []
-	for n in Globals.searchWord.length():
-		searchArray.append(Globals.searchWord[n].to_lower())
+	#improved search function
+	if name.find(Globals.searchWord.to_lower()) != -1:
+		button.visible = true
+	else:
+		button.visible = false
 
-	
-	for n in searchArray.size():
-		if nameArray[n] != searchArray[n]:
-			button.visible = false
-			break
-		else:
-			button.visible = true
-		
+	#makes sure that it there is something there
 	if Globals.searchWord == "":
 		button.visible = true
-
 
 func _on_search_text_changed(new_text):
 	Globals.searchWord = new_text
