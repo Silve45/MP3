@@ -74,7 +74,6 @@ func _add_playlist_button():
 	button2.pressed.connect(_playlist_edit_open.bind(button2))
 	button2.text = str(num)
 
-
 func _playlist_edit_open(button2):
 	#print(button2.array)
 	currentButton = button2
@@ -83,11 +82,9 @@ func _playlist_edit_open(button2):
 	_ready_playlist_array(button2.array)
 	buttonPlaylists.visible = true
 
-
 func _on_add_new_button_pressed():
 	_add_playlist_button()
 	_add_button_index_last()
-
 
 func _on_line_edit_text_submitted(new_text):
 	_add_playlist_array(currentArray, new_text)

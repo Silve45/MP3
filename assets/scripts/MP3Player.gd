@@ -32,7 +32,7 @@ func _ready():
 	
 	_get_folders_ready()
 	_ready_shuffle()
-	_check_loop()
+	_check_loop() 
 	_check_sound_board()
 	_check_play_on_switch()
 	_hide_scroll_bars()
@@ -94,6 +94,7 @@ func _on_back_pressed():
 
 func _on_refresh_song_pressed():
 	_re_add_songs()
+
 
 func _on_loop_pressed():
 	if SaveData.soundBoard == true:# makes sure you can't turn loop on
@@ -293,6 +294,7 @@ func _set_music():
 	if musicArray.size() == 0:
 		_re_add_songs()
 	music.stream = load_mp3(musicArray[0])
+	_set_ready_loop()#okay I put this here so it will loop if you have loop on.
 	_song_title(musicArray[0])
 	songLabel.set_text(_song_title(musicArray[0]))
 	smallSongLabel.set_text(_song_title(musicArray[0]))
@@ -303,6 +305,14 @@ func _set_music():
 	_resetScroll()
 	var length = music.stream.get_length()
 	songSlider.max_value = length
+
+func _set_ready_loop(): #just used to check if set music is looping at start or not
+	if SaveData.loop == true:
+		sound.loop = true
+		printerr("loop on")
+	else:
+		sound.loop = false
+		printerr("loop off")
 
 func _on_scroll_timer_timeout():
 	_scroll()
